@@ -1,2 +1,2 @@
-# hammer
-A NodeJS CMS that does the small things right.
+# Hammer
+Hammer is currently under development. I will update this page when i have more information.
