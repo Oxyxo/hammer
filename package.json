@@ -1,0 +1,29 @@
+{
+  "name": "projecthammer",
+  "version": "0.1.0",
+  "description": "a mudulair node cms",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/projecthammer/hammer.git"
+  },
+  "keywords": [
+    "cms",
+    "hammer",
+    "modulair",
+    "project"
+  ],
+  "author": "Jeroen Rinzema",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/projecthammer/hammer/issues"
+  },
+  "homepage": "https://github.com/projecthammer/hammer#readme",
+  "dependencies": {
+    "bookshelf": "^0.10.2",
+    "express": "^4.14.0",
+    "knex": "^0.12.1",
+    "sqlite3": "^3.1.4"
+  }
+}
