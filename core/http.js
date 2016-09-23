@@ -4,7 +4,6 @@ const Routes = require('./routes');
 
 class HTTP {
   constructor(port) {
-
   }
 }
 
