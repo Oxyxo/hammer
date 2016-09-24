@@ -1,12 +1,11 @@
 'use strict';
 
-const db = require('./');
+const database = require('../database');
 const _ = require('lodash');
 
 class Commands {
-  addTableColumn(tableName, table, columnName) {
-    let column,
-        columnSpec = schema[tableName][columnName];
+  addTableColumn(table, columnName, columnSpec) {
+    let column;
 
     if(columnSpec.type === 'text' && columnSpec.hasOwnProperty('fieldtype')) {
       column = table[columnSpec.type](columnName, columnSpec.fieldtype);
@@ -39,19 +38,18 @@ class Commands {
     }
   }
 
-  addColumn(tableName, column, transaction) {
-    return (transaction || db.knex).schema.table(tableName, (table)=> {
+  addColumn(tableName, column) {
+    database.knex.schema.table(tableName, (table)=> {
       this.addTableColumn(tableName, table, column);
     });
   }
 
-  createTable(table, transaction, schema) {
-    return (transaction || db.knex).schema.createTableIfNotExists(table, (t)=> {
-        let columnKeys = _.keys(schema);
-        _.each(columnKeys, (column)=> {
-          return this.addTableColumn(table, t, column);
-        });
-    });
+  createTable(name, schema) {
+    database.knex.schema.createTableIfNotExists(name, (table)=> {
+      _.each(schema, (column, key)=> {
+        return this.addTableColumn(table, key, column);
+      });
+    }).then();
   }
 }
 
