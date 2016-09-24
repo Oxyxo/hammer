@@ -17,10 +17,10 @@ class Hammer {
     };
   }
 
-  constructor(config = {}) {
+  setup(config) {
     config = Object.assign(this.defaultConfig, config);
     new core(config);
   }
 }
 
-module.exports = Hammer;
+module.exports = new Hammer();
