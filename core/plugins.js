@@ -1,6 +1,8 @@
+'use strict';
+
 class Plugins {
   expand(module, callback) {
-    
+
   }
 }
 
