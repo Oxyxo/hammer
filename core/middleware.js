@@ -1,10 +1,12 @@
 'use strict';
 
 const async = require('async');
+const modules = require('./modules');
 
 class Middleware {
   constructor() {
     this._events = {};
+    modules.set('middleware', this);
   }
 
   on(name, fn) {
@@ -16,6 +18,10 @@ class Middleware {
 
   call(name, args, cb = ()=>{}) {
     let i = -1;
+    if(!this._events[name]) {
+      return cb([]);
+    }
+
     async.whilst(()=> {
       i++; return i < this._events[name].length;
     }, (done)=> {
