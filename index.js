@@ -1,7 +1,9 @@
 'use strict';
 
+const _ = require('lodash');
 const path = require('path');
 const core = require('./core');
+const modules = require('./core/modules');
 
 class Hammer {
   get defaultConfig() {
@@ -15,6 +17,14 @@ class Hammer {
         "useNullAsDefault": true
       }
     };
+  }
+
+  get modules() {
+    return modules.collect;
+  }
+
+  get plugins() {
+    //collect all plugins and return
   }
 
   setup(config) {
