@@ -1,12 +1,29 @@
 'use strict';
 
-const routes = require('./routes');
 const express = require('express');
 const net = require('net');
+const middleware = require('./middleware');
 
 class HTTP {
   constructor() {
-    this.app = express();
+    this.server = express();
+  }
+
+  handle() {
+    this.server.all('*', (req, res, next)=> {
+      req.on('end', ()=> {
+        middleware.call('after_request', [req]);
+      });
+
+      middleware.call('before_request', [req, res], (_res)=> {
+        for(let i=0;i<_res.length;i++) {
+          if(_res[i]) {
+            return;
+          }
+        }
+        next();
+      });
+    });
   }
 
   open(port, cb = ()=>{}) {
@@ -16,7 +33,8 @@ class HTTP {
         return;
       }
 
-      this.app.listen(port, cb);
+      this.server.listen(port, cb);
+      this.handle();
     });
   }
 
