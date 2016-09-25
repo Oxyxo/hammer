@@ -45,14 +45,17 @@ class Commands {
   }
 
   createTable(name, schema) {
-    if(database.knex.schema.hasTable(name)) {
-      return;
-    }
-    database.knex.schema.createTableIfNotExists(name, (table)=> {
-      _.each(schema, (column, key)=> {
-        return this.addTableColumn(table, key, column);
-      });
-    }).then();
+    database.knex.schema.hasTable(name).then((table)=> {
+      if(table) {
+        return;
+      }
+
+      database.knex.schema.createTableIfNotExists(name, (table)=> {
+        _.each(schema, (column, key)=> {
+          return this.addTableColumn(table, key, column);
+        });
+      }).then();
+    });
   }
 }
 
