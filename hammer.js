@@ -18,7 +18,8 @@ class Hammer {
           "filename": path.join(process.cwd(), 'database')
         },
         "useNullAsDefault": true
-      }
+      },
+      "hammerRoot": __dirname
     };
   }
 
