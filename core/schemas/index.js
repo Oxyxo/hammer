@@ -10,7 +10,7 @@ class Schemas {
     modules.extend('schemas', this);
   }
 
-  new(name, schema) {
+  newTable(name, schema) {
     commands.createTable(name, schema);
   }
 
