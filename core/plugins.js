@@ -6,7 +6,7 @@ const log = require('./log');
 const path = require('path');
 const async = require('async');
 const modules = require('./modules');
-const middleware = require('./middleware');
+const intercom = require('./intercom');
 
 class Plugins {
   constructor() {
@@ -106,21 +106,26 @@ class Plugins {
   }
 
   constructPlugins() {
-    middleware.call('before_construct_plugins', [this._plugins], ()=> {
-      let keys = _.keys(this._plugins),
-          i = 0;
+    intercom.emit('before_construct_plugins', [this._plugins]);
 
-      async.whilst(()=> {
-        i++; return i<keys.length;
-      }, (done)=> {
-        let plugin = this._plugins[keys[i]],
-            main = require(path.join(plugin.base, plugin.main));
+    let keys = _.keys(this._plugins),
+        i = -1;
 
-        new main(global.Hammer);
-        done();
-      }, ()=> {
-        middleware.call('after_construct_plugins', [this._plugins]);
-      });
+    async.whilst(()=> {
+      i++; return i < keys.length;
+    }, (done)=> {
+      let plugin = this._plugins[keys[i]];
+      if(plugin.initialised) {
+        return done();
+      }
+
+      let main = require(path.join(plugin.base, plugin.main));
+      new main(global.Hammer);
+
+      this._plugins[keys[i]].initialised = true;
+      return done();
+    }, ()=> {
+      intercom.emit('after_construct_plugins', [this._plugins]);
     });
   }
 
