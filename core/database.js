@@ -9,14 +9,11 @@ class Database {
 
   open(config) {
     this.knex = knex(config);
-    this.bookshelf = bookshelf(knex);
     return this;
   }
 
   model(table) {
-    return this.bookshelf.Model.extend({
-      "tableName": table
-    });
+    return this.knex(table);
   }
 }
 
