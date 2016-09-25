@@ -3,7 +3,7 @@
 module.exports = {
   "users": {
     "id": {"type": "increments", "nullable": false, "primary": true},
-    "uuid": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
+    "uuid": {"type": "string", "nullable": false, "unique": true},
     "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
     "password": {"type": "string", "nullable": false},
     "email": {"type": "string", "maxlength": 191, "nullable": false, "unique": true},
