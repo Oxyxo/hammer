@@ -14,6 +14,14 @@ class Schemas {
     commands.createTable(name, schema);
   }
 
+  newTables(tables) {
+    let keys = _.keys(tables);
+    for(let i=0;i<keys.length;i++) {
+      let columns = tables[keys[i]];
+      this.newTable(keys[i], columns);
+    }
+  }
+
   addColumnToTable(table, colmn) {
     commands.addColumn(table, colmn);
   }
