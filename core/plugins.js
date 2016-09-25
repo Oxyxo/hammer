@@ -4,6 +4,7 @@ const _ = require('lodash');
 const fs = require('fs');
 const log = require('./log');
 const path = require('path');
+const async = require('async');
 const modules = require('./modules');
 const middleware = require('./middleware');
 
@@ -68,7 +69,7 @@ class Plugins {
         this.expand(plugin, config);
       }
 
-      this.initPlugins();
+      this.constructPlugins();
     }
   }
 
@@ -104,16 +105,21 @@ class Plugins {
     return config;
   }
 
-  initPlugins() {
-    middleware.call('before_init_plugins', [this._plugins], ()=> {
-      _.each(this._plugins, (plugin, key)=> {
-        if(plugin.initialised) {
-          return;
-        }
+  constructPlugins() {
+    middleware.call('before_construct_plugins', [this._plugins], ()=> {
+      let keys = _.keys(this._plugins),
+          i = 0;
 
-        //TODO: should we maybe place all plugins in their own cluster enviroments to control health of a plugin
-        const main = require(path.join(plugin.base, plugin.main));
+      async.whilst(()=> {
+        i++; return i<keys.length;
+      }, (done)=> {
+        let plugin = this._plugins[keys[i]],
+            main = require(path.join(plugin.base, plugin.main));
+
         new main(global.Hammer);
+        done();
+      }, ()=> {
+        middleware.call('after_construct_plugins', [this._plugins]);
       });
     });
   }
