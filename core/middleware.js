@@ -16,7 +16,7 @@ class Middleware {
     this._events[name].push(fn);
   }
 
-  call(name, args, cb = ()=>{}) {
+  call(name, args = [], cb = ()=>{}) {
     let i = -1;
     if(!this._events[name]) {
       return cb([]);
