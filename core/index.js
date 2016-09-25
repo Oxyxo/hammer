@@ -9,7 +9,7 @@ class Core {
     database.open(config.database);
     http.open(config.port);
 
-    schemas.initialize();
+    schemas._initialize();
   }
 }
 
