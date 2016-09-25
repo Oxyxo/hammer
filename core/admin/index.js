@@ -1,11 +1,11 @@
 'use strict';
 
-const http = require('./http');
-const database = require('./database');
-const modules = require('./modules');
+const routes = require('./routes');
 
 class Admin {
+  constructor() {
 
+  }
 }
 
 module.exports = new Admin();

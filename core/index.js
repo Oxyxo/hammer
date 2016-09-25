@@ -4,6 +4,7 @@ const http = require('./http');
 const database = require('./database');
 const schemas = require('./schemas');
 const plugins = require('./plugins');
+const admin = require('./admin');
 
 class Core {
   constructor(config) {
@@ -12,6 +13,14 @@ class Core {
 
     schemas._initialize();
     plugins._initialize();
+
+    return [
+      http,
+      database,
+      schemas,
+      plugins,
+      admin
+    ];
   }
 }
 

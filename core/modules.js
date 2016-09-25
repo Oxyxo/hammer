@@ -1,3 +1,5 @@
+'use strict';
+
 class Modules {
   constructor() {
     this._modules = {};

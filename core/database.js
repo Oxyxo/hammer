@@ -1,3 +1,5 @@
+'use strict';
+
 const knex = require('knex');
 const bookshelf = require('bookshelf');
 const modules = require('./modules');
