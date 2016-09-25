@@ -28,6 +28,10 @@ class HTTP {
     });
   }
 
+  static(url, folder) {
+    //TODO: create flexibele static
+  }
+
   open(port, cb = ()=>{}) {
     this.portInUse(port, (inUse)=> {
       if(inUse) {
