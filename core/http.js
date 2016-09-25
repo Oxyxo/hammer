@@ -15,7 +15,7 @@ class HTTP {
         middleware.call('after_response', [req]);
       });
 
-      middleware.call('before_request', [req, res], (_res)=> {
+      middleware.call('on_request', [req, res], (_res)=> {
         if(_res) {
           for(let i=0;i<_res.length;i++) {
             if(_res[i]) {
