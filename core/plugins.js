@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const fs = require('fs');
 const log = require('./log');
 const path = require('path');
@@ -66,6 +67,8 @@ class Plugins {
         let config = require(path.join(plugin, this.config.configJSON));
         this.expand(plugin, config);
       }
+
+      this.initPlugins();
     }
   }
 
@@ -96,16 +99,30 @@ class Plugins {
 
     //TODO: check if plugin is compatible with current Hammer version
 
+    config.base = base;
     this._plugins[config.name] = config;
     return config;
   }
 
-  startup() {
+  initPlugins() {
     middleware.call('before_init_plugins', [this._plugins], ()=> {
+      _.each(this._plugins, (plugin, key)=> {
+        if(plugin.initialized) {
+          return;
+        }
+
+        //TODO: should we maybe place all plugins in their own cluster enviroments to control health of a plugin
+        const main = require(path.join(plugin.base, plugin.main));
+        new main(global.Hammer);
+      });
     });
   }
 
-  uninstall() {
+  deactivate() {
+
+  }
+
+  delete() {
 
   }
 }
