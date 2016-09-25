@@ -16,9 +16,11 @@ class HTTP {
       });
 
       middleware.call('before_request', [req, res], (_res)=> {
-        for(let i=0;i<_res.length;i++) {
-          if(_res[i]) {
-            return;
+        if(_res) {
+          for(let i=0;i<_res.length;i++) {
+            if(_res[i]) {
+              return;
+            }
           }
         }
         next();
