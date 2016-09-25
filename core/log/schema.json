@@ -1,0 +1,22 @@
+{
+  "noPluginConfiguration": {
+    "message": "There is no plugin configuration file found: {{configFile}} in the folder: {{folder}}",
+    "level": "error"
+  },
+  "noPluginName": {
+    "message": "There is no plugin name defined in the following config:",
+    "level": "error"
+  },
+  "noPluginMainFile": {
+    "message": "There is no main plugin file defined or the file does not exists in the following config:",
+    "level": "error"
+  },
+  "noCompatibleHammerVersionDefined": {
+    "message": "There is no compatible hammer version defined in the following config:",
+    "level": "warning"
+  },
+  "pluginNameAlreadyInUse": {
+    "message": "The plugin name: {{name}} is already in use",
+    "level": "error"
+  }
+}
