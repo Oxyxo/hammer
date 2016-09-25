@@ -5,7 +5,7 @@ const modules = require('./modules');
 class Intercom {
   constructor() {
     this._events = {};
-    modules.expand('intercom', this);
+    modules.extend('intercom', this);
   }
 
   on(e, cb) {
