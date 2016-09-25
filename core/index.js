@@ -3,6 +3,7 @@
 const http = require('./http');
 const database = require('./database');
 const schemas = require('./schemas');
+const plugins = require('./plugins');
 
 class Core {
   constructor(config) {
@@ -10,6 +11,7 @@ class Core {
     http.open(config.port);
 
     schemas._initialize();
+    plugins._initialize();
   }
 }
 
