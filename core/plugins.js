@@ -107,7 +107,7 @@ class Plugins {
   initPlugins() {
     middleware.call('before_init_plugins', [this._plugins], ()=> {
       _.each(this._plugins, (plugin, key)=> {
-        if(plugin.initialized) {
+        if(plugin.initialised) {
           return;
         }
 
