@@ -12,7 +12,7 @@ class HTTP {
   handle() {
     this.server.all('*', (req, res, next)=> {
       req.on('end', ()=> {
-        middleware.call('after_request', [req]);
+        middleware.call('after_response', [req]);
       });
 
       middleware.call('before_request', [req, res], (_res)=> {
