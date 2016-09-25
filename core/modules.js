@@ -3,7 +3,7 @@ class Modules {
     this._modules = {};
   }
 
-  set(n, v) {
+  extend(n, v) {
     this._modules[n] = v;
   }
 

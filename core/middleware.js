@@ -6,7 +6,7 @@ const modules = require('./modules');
 class Middleware {
   constructor() {
     this._events = {};
-    modules.set('middleware', this);
+    modules.extend('middleware', this);
   }
 
   on(name, fn) {

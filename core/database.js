@@ -4,7 +4,7 @@ const modules = require('./modules');
 
 class Database {
   constructor() {
-
+    modules.extend('database', this);
   }
 
   open(config) {
