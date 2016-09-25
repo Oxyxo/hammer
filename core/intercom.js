@@ -20,6 +20,10 @@ class Intercom {
       d = [d];
     }
 
+    if(!this._events[e]) {
+      return;
+    }
+    
     for(let i=0;i<this._events[e].length;i++) {
       this._events[e][i].apply(null, d);
     }
