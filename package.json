@@ -4,6 +4,7 @@
   "description": "a mudulair node cms",
   "main": "index.js",
   "scripts": {
+    "start": "node index",
     "test": "mocha /tests/index.js"
   },
   "repository": {
