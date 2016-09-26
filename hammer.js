@@ -5,8 +5,10 @@ const path = require('path');
 const modules = require('./core/modules');
 
 class Hammer {
-  constructor() {
+  constructor(config = {}) {
+    this.inputConfig = config;
     global.Hammer = this;
+    return this;
   }
 
   get defaultConfig() {
@@ -24,7 +26,7 @@ class Hammer {
   }
 
   set config(inputConfig = {}) {
-    this._inputConfig = inputConfig;
+    this.inputConfig = inputConfig;
   }
 
   get config() {

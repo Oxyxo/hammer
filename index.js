@@ -1,11 +1,15 @@
 'use strict';
+
+const Hammer = require('./hammer');
 const core = require('./core');
+let Nail;
 
-class Hammer extends require('./hammer') {
-  setup(config = {}) {
-    this.config = config;
-    new core(this.config);
+module.exports = function(config) {
+  if(Nail) {
+    return Nail;
   }
-}
 
-module.exports = new Hammer();
+  Nail = new Hammer(config);
+  new core(Nail.config);
+  return Nail;
+};
