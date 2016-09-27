@@ -1,7 +1,7 @@
 {
-  "name": "hammer",
+  "name": "projecthammer",
   "version": "0.1.0",
-  "description": "a mudulair node cms",
+  "description": "A mudulair node cms",
   "main": "index.js",
   "scripts": {
     "start": "node index",
