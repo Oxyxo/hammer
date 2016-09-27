@@ -41,6 +41,9 @@ class Plugins {
   }
 
   _initialize() {
+    this.deferred = Promise.defer();
+    this.promise = this.deferred.promise;
+
     let pluginFolders = this.config.pluginFolders;
     if(!pluginFolders) {
       return; //TODO: throw error no pluginFolders defined
@@ -71,6 +74,9 @@ class Plugins {
 
       this.constructPlugins();
     }
+
+    this.deferred.resolve(this);
+    return this.promise;
   }
 
   expand(base, config) {

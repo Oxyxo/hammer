@@ -27,11 +27,17 @@ class Schemas {
   }
 
   _initialize() {
+    this.deferred = Promise.defer();
+    this.promise = this.deferred.promise;
+
     let tables = _.keys(schemas);
     for(let i=0;i<tables.length;i++) {
       let name = tables[i];
       commands.createTable(name, schemas[name]);
     }
+
+    this.deferred.resolve(this);
+    return this.promise;
   }
 }
 

@@ -33,6 +33,9 @@ class HTTP {
   }
 
   open(port, cb = ()=>{}) {
+    this.deferred = Promise.defer();
+    this.promise = this.deferred.promise;
+
     this.portInUse(port, (inUse)=> {
       if(inUse) {
         //TODO: throw error port in use
@@ -41,7 +44,10 @@ class HTTP {
 
       this.server.listen(port, cb);
       this.handle();
+      this.deferred.resolve(this);
     });
+
+    return this.promise;
   }
 
   portInUse(port, cb) {
