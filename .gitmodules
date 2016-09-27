@@ -1,6 +1,3 @@
 [submodule "plugins/pages"]
 	path = plugins/pages
 	url = https://github.com/projecthammer/pages.git
-[submodule "core/admin/client"]
-	path = core/admin/client
-	url = https://github.com/projecthammer/client.git
