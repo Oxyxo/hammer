@@ -16,7 +16,7 @@ module.exports = {
   "tokens": {
     "access": {"type": "string", "nullable": false, "unique": true},
     "refresh": {"type": "string", "nullable": false, "unique": true},
-    "user": {"type": "interger", "nullable": false},
+    "user": {"type": "integer", "nullable": false},
     "created_at": {"type": "dateTime", "nullable": false}
   }
 };
