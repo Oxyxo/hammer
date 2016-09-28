@@ -15,7 +15,9 @@ class Database {
   open(config) {
     let deferred = Promise.defer();
     let promise = deferred.promise;
+
     this.knex = knex(config);
+    this.bookshelf = bookshelf(this.knex);
 
     this.initializeSchemas().then(()=> {
       deferred.resolve(this);
@@ -41,7 +43,7 @@ class Database {
   }
 
   addColumnToTable(table, colmn) {
-    
+
     commands.addColumn(table, colmn);
   }
 
