@@ -9,8 +9,8 @@ const modules = require('./modules');
 
 class Hammer {
   constructor(config = {}) {
-    this.deferred = Promise.defer();
-    this.promise = this.deferred.promise;
+    let deferred = Promise.defer();
+    let promise = deferred.promise;
 
     this.input_config = config;
 
@@ -20,10 +20,10 @@ class Hammer {
       schemas.init(),
       plugins.init()
     ]).then(()=> {
-      this.deferred.resolve(this);
+      deferred.resolve(this);
     });
 
-    return this.promise;
+    return promise;
   }
 
   set config(config = {}) {
