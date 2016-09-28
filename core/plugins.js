@@ -40,7 +40,7 @@ class Plugins {
     return true;
   }
 
-  init() {
+  initialize() {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 

@@ -17,8 +17,8 @@ class Hammer {
     Promise.all([
       database.open(this.config.database),
       http.open(this.config.port),
-      schemas.init(),
-      plugins.init()
+      schemas.initialize(),
+      plugins.initialize()
     ]).then(()=> {
       deferred.resolve(this);
     });

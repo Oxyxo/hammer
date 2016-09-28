@@ -26,7 +26,7 @@ class Schemas {
     commands.addColumn(table, colmn);
   }
 
-  init() {
+  initialize() {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
