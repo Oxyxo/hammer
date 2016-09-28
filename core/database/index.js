@@ -1,17 +1,35 @@
 'use strict';
 
 const _ = require('lodash');
+const knex = require('knex');
+const bookshelf = require('bookshelf');
 const commands = require('./commands');
 const schemas = require('./schemas');
 const modules = require('../modules');
 
-class Schemas {
+class Database {
   constructor() {
-    modules.extend('schemas', this);
+    modules.extend('database', this);
+  }
+
+  open(config) {
+    let deferred = Promise.defer();
+    let promise = deferred.promise;
+    this.knex = knex(config);
+
+    this.initializeSchemas().then(()=> {
+      deferred.resolve(this);
+    });
+
+    return promise;
+  }
+
+  model(table) {
+    return this.knex(table);
   }
 
   newTable(name, schema) {
-    commands.createTable(name, schema);
+    commands.createTable(name, schema, this);
   }
 
   newTables(tables) {
@@ -23,17 +41,18 @@ class Schemas {
   }
 
   addColumnToTable(table, colmn) {
+    
     commands.addColumn(table, colmn);
   }
 
-  initialize() {
+  initializeSchemas() {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
     let tables = _.keys(schemas);
     for(let i=0;i<tables.length;i++) {
       let name = tables[i];
-      commands.createTable(name, schemas[name]);
+      commands.createTable(name, schemas[name], this);
     }
 
     deferred.resolve(this);
@@ -41,4 +60,4 @@ class Schemas {
   }
 }
 
-module.exports = new Schemas();
+module.exports = new Database();
