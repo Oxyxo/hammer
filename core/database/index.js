@@ -26,8 +26,11 @@ class Database {
     return promise;
   }
 
-  model(table) {
-    return this.knex(table);
+  model(table, options = {}) {
+    options = Object.assign({
+      "tableName": table
+    }, options);
+    return this.bookshelf.Model.extend(options);
   }
 
   newTable(name, schema) {
