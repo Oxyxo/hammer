@@ -40,9 +40,9 @@ class Plugins {
     return true;
   }
 
-  _initialize() {
-    this.deferred = Promise.defer();
-    this.promise = this.deferred.promise;
+  init() {
+    let deferred = Promise.defer();
+    let promise = deferred.promise;
 
     let pluginFolders = this.config.pluginFolders;
     if(!pluginFolders) {
@@ -71,12 +71,13 @@ class Plugins {
         let config = require(path.join(plugin, this.config.configJSON));
         this.expand(plugin, config);
       }
-
-      this.constructPlugins();
     }
 
-    this.deferred.resolve(this);
-    return this.promise;
+    this.constructPlugins().then(()=> {
+      deferred.resolve(this);
+    });
+
+    return promise;
   }
 
   expand(base, config) {
@@ -112,6 +113,9 @@ class Plugins {
   }
 
   constructPlugins() {
+    let deferred = Promise.defer();
+    let promise = deferred.promise;
+
     intercom.emit('before_construct_plugins', [this._plugins]);
 
     let keys = _.keys(this._plugins),
@@ -132,7 +136,10 @@ class Plugins {
       return done();
     }, ()=> {
       intercom.emit('after_construct_plugins', [this._plugins]);
+      deferred.resolve();
     });
+
+    return promise;
   }
 
   deactivate() {

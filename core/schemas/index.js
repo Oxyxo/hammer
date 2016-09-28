@@ -26,9 +26,9 @@ class Schemas {
     commands.addColumn(table, colmn);
   }
 
-  _initialize() {
-    this.deferred = Promise.defer();
-    this.promise = this.deferred.promise;
+  init() {
+    let deferred = Promise.defer();
+    let promise = this.deferred.promise;
 
     let tables = _.keys(schemas);
     for(let i=0;i<tables.length;i++) {
@@ -36,8 +36,8 @@ class Schemas {
       commands.createTable(name, schemas[name]);
     }
 
-    this.deferred.resolve(this);
-    return this.promise;
+    deferred.resolve(this);
+    return promise;
   }
 }
 

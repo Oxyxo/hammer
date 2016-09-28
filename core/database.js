@@ -10,13 +10,13 @@ class Database {
   }
 
   open(config) {
-    this.deferred = Promise.defer();
-    this.promise = this.deferred.promise;
+    let deferred = Promise.defer();
+    let promise = this.deferred.promise;
 
     this.knex = knex(config);
-    this.deferred.resolve(this);
+    deferred.resolve(this);
 
-    return this.promise;
+    return promise;
   }
 
   model(table) {

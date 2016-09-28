@@ -33,8 +33,8 @@ class HTTP {
   }
 
   open(port, cb = ()=>{}) {
-    this.deferred = Promise.defer();
-    this.promise = this.deferred.promise;
+    let deferred = Promise.defer();
+    let promise = deferred.promise;
 
     this.portInUse(port, (inUse)=> {
       if(inUse) {
@@ -44,10 +44,10 @@ class HTTP {
 
       this.server.listen(port, cb);
       this.handle();
-      this.deferred.resolve(this);
+      deferred.resolve(this);
     });
 
-    return this.promise;
+    return promise;
   }
 
   portInUse(port, cb) {
