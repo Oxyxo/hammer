@@ -28,7 +28,7 @@ class Schemas {
 
   init() {
     let deferred = Promise.defer();
-    let promise = this.deferred.promise;
+    let promise = deferred.promise;
 
     let tables = _.keys(schemas);
     for(let i=0;i<tables.length;i++) {

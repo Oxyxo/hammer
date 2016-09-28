@@ -11,7 +11,7 @@ class Database {
 
   open(config) {
     let deferred = Promise.defer();
-    let promise = this.deferred.promise;
+    let promise = deferred.promise;
 
     this.knex = knex(config);
     deferred.resolve(this);
