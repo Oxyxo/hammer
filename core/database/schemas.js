@@ -17,7 +17,6 @@ module.exports = {
     "access": {"type": "string", "nullable": false, "unique": true},
     "refresh": {"type": "string", "nullable": false, "unique": true},
     "user": {"type": "interger", "nullable": false},
-    "created_at": {"type": "dateTime", "nullable": false},
-    "created_by": {"type": "integer", "nullable": false}
+    "created_at": {"type": "dateTime", "nullable": false}
   }
 };
