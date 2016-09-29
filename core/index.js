@@ -2,9 +2,10 @@
 
 const path = require('path');
 const http = require('./http');
-const database = require('./database');
 const plugins = require('./plugins');
 const modules = require('./modules');
+const database = require('./database');
+const authentication = require('./authentication');
 
 class Hammer {
   constructor(config = {}) {
@@ -16,7 +17,8 @@ class Hammer {
     Promise.all([
       database.open(this.config.database),
       http.open(this.config.port),
-      plugins.initialize()
+      plugins.initialize(this.config.plugins),
+      authentication.initialize()
     ]).then(()=> {
       deferred.resolve(this);
     });
@@ -39,8 +41,7 @@ class Hammer {
         "client": "sqlite3",
         "connection": {
           "filename": path.join(process.cwd(), 'database')
-        },
-        "useNullAsDefault": true
+        }
       },
       "hammerRoot": __dirname
     };

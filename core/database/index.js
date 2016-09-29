@@ -13,6 +13,15 @@ class Database {
   }
 
   open(config) {
+    if(config.client === 'sqlite3') {
+      config.useNullAsDefault = config.useNullAsDefault || false;
+    }
+
+    if(config.client === 'mysql') {
+      config.connection.timezone = 'UTC';
+      config.connection.charset = 'utf8mb4';
+    }
+
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
