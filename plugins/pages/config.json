@@ -1,0 +1,7 @@
+{
+  "name": "pages",
+  "description": "",
+  "author": "Jeroen Rinzema",
+  "main": "index.js",
+  "hammer": ">=0.1.0"
+}
