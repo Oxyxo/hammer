@@ -12,6 +12,7 @@ module.exports = (e, d = {})=> {
 
   //TODO: build a log output
   console.log(e);
-
   //console.log(schema[e].message);
+
+  return schema[e].message;
 };

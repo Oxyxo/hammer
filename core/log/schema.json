@@ -22,5 +22,9 @@
   "no.plugin.folders.defined": {
     "message": "There are no plugin folders defined please set a plugin folder in order to load in plugins",
     "level": "warning"
+  },
+  "no.core.plugin.folder.defined": {
+    "message": "There is no core plugins folder defined. To be able to load in core plugins set a core plugins folder",
+    "level": "warning"
   }
 }
