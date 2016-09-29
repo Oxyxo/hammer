@@ -26,5 +26,9 @@
   "no.core.plugin.folder.defined": {
     "message": "There is no core plugins folder defined. To be able to load in core plugins set a core plugins folder",
     "level": "warning"
+  },
+  "config.plugins.folder.is.not.array": {
+    "message": "There is no plugins folder set in the config or given config option is not an array",
+    "level": "warning"
   }
 }
