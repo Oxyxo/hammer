@@ -9,7 +9,6 @@ module.exports = {
     "language": {"type": "string", "maxlength": 6, "nullable": false, "defaultTo": "en_US"},
     "last_login": {"type": "dateTime", "nullable": true},
     "created_at": {"type": "dateTime", "nullable": false},
-    "created_by": {"type": "integer", "nullable": false},
     "updated_at": {"type": "dateTime", "nullable": true},
     "updated_by": {"type": "integer", "nullable": true}
   },

@@ -33,11 +33,13 @@ class Authentication {
         let token = new this.tokens({
           "user": user.id,
           "access": uuid.v4(),
-          "refresh": uuid.v4()
+          "refresh": uuid.v4(),
+          "created_at": new Date().toString()
         });
 
-        token.save();
-        return deferred.resolve(token.toJSON());
+        token.save().then(()=> {
+          return deferred.resolve(token.toJSON());
+        });
       });
     }
 
@@ -110,14 +112,14 @@ class Authentication {
     let promise = deferred.promise;
 
     if(!string) {
-      promise.reject(new Error('no string given'));
+      deferred.reject(new Error('no string given'));
     } else {
       bcrypt.genSalt(config.get.hashRounds, (err, salt)=> {
           bcrypt.hash(string, salt, (err, hash)=> {
               if(err) {
-                return promise.reject(err);
+                return deferred.reject(err);
               }
-              promise.resolve(hash);
+              deferred.resolve(hash);
           });
       });
     }

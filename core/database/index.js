@@ -16,7 +16,7 @@ class Database {
   open() {
     let database = config.get.database;
     if(database.client === 'sqlite3') {
-      database.useNullAsDefault = database.useNullAsDefault || false;
+      database.useNullAsDefault = database.useNullAsDefault || true;
     }
 
     if(database.client === 'mysql') {
