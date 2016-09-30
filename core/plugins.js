@@ -1,5 +1,7 @@
 'use strict';
 
+//FIXME: i am not really happy with how this code flows
+
 const _ = require('lodash');
 const fs = require('fs-extra');
 const log = require('./log');
