@@ -11,7 +11,12 @@ class Config {
         }
       },
       "hammerRoot": __dirname,
-      "hashRounds": 10
+      "hashRounds": 10,
+      "plugins": {
+        "corePlugins": path.join(__dirname, '../plugins'),
+        "pluginFolders": [path.join(process.cwd(), 'plugins')],
+        "configJSON": "config.json"
+      }
     };
   }
 

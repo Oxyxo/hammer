@@ -7,57 +7,45 @@ const fs = require('fs-extra');
 const log = require('./log');
 const path = require('path');
 const async = require('async');
+const config = require('./config');
 const modules = require('./modules');
 const intercom = require('./intercom');
 
 class Plugins {
   constructor() {
     this._plugins = {};
-    this._config = {
-      "corePlugins": path.join(__dirname, '../plugins'),
-      "pluginFolders": [path.join(process.cwd(), 'plugins')],
-      "configJSON": "config.json"
-    };
 
-    for(let i=0;i<this.config.pluginFolders.length;i++) {
-      fs.mkdirsSync(this.config.pluginFolders[i]);
+    for(let i=0;i<config.get.plugins.pluginFolders.length;i++) {
+      fs.mkdirsSync(config.get.plugins.pluginFolders[i]);
     }
 
     modules.extend('plugins', this);
   }
 
-  set config(inputConfig) {
-    this._config = Object.assign(this._config, inputConfig);
-  }
-
-  get config() {
-    return this._config;
-  }
-
-  initialize(config = {}) {
+  initialize() {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
-    if(!this.config.corePlugins) {
+    if(!config.get.plugins.corePlugins) {
       return deferred.reject(new Error(log('no.core.plugin.folder.defined')));
     }
 
     let folders = [
-      this.initializeFolder(this.config.corePlugins, true)
+      this.initializeFolder(config.get.plugins.corePlugins, true)
     ];
 
-    if(this.config.pluginFolders) {
-      let pluginFolders = this.config.pluginFolders;
-      if(!this.config.pluginFolders || !Array.isArray(pluginFolders)) {
+    if(config.get.plugins.pluginFolders) {
+      let pluginFolders = config.get.plugins.pluginFolders;
+      if(!config.get.plugins.pluginFolders || !Array.isArray(pluginFolders)) {
         log('config.plugins.folder.is.not.array');
       } else {
         for(let i=0;i<pluginFolders.length;i++) {
-          folders.push(this.initializeFolder(this.config.pluginFolders[i]));
+          folders.push(this.initializeFolder(config.get.plugins.pluginFolders[i]));
         }
       }
     }
 
-    this.config = config;
+    config.get.plugins = config;
     Promise.all(folders).then(()=> {
       deferred.resolve();
     });
@@ -104,16 +92,16 @@ class Plugins {
 
     folders.forEach((folder, index)=> {
       const pluginBase = path.join(base, folder);
-      let config = path.join(pluginBase, this.config.configJSON);
+      let config = path.join(pluginBase, config.get.plugins.configJSON);
 
       if(!fs.statSync(config).isFile()) {
-        let message = log('no.plugin.configuration', {"configFile": this.config.configJSON, "folder": folder});
+        let message = log('no.plugin.configuration', {"configFile": config.get.plugins.configJSON, "folder": folder});
         return deferred.reject(new Error(message));
       }
 
       fs.readJson(config, (err, json)=> {
         if(err) {
-          let message = log('plugin.config.not.json', {"configFile": this.config.configJSON, "folder": folder});
+          let message = log('plugin.config.not.json', {"configFile": config.get.plugins.configJSON, "folder": folder});
           return deferred.reject(new Error(message));
         }
 
