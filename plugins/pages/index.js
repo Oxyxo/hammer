@@ -1,8 +1,6 @@
 'use strict';
 
-class Pages {
-  constructor(Hammer) {
+module.exports = class Pages {
+  constructor() {
   }
-}
-
-module.exports = Pages;
+};
