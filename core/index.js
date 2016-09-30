@@ -3,6 +3,7 @@
 const path = require('path');
 const http = require('./http');
 const config = require('./config');
+const client = require('./client');
 const plugins = require('./plugins');
 const modules = require('./modules');
 const database = require('./database');
@@ -20,8 +21,10 @@ class Hammer {
       http.open(),
       authentication.initialize()
     ]).then(()=> {
-      global.Hammer = this;
+      new client();
       plugins.initialize();
+
+      global.Hammer = this;
       deferred.resolve(this);
     });
 
