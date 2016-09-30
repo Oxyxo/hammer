@@ -3,6 +3,7 @@
 const _ = require('lodash');
 const knex = require('knex');
 const bookshelf = require('bookshelf');
+const config = require('../config');
 const commands = require('./commands');
 const schemas = require('./schemas');
 const modules = require('../modules');
@@ -12,20 +13,21 @@ class Database {
     modules.extend('database', this);
   }
 
-  open(config) {
-    if(config.client === 'sqlite3') {
-      config.useNullAsDefault = config.useNullAsDefault || false;
+  open() {
+    let database = config.get.database;
+    if(database.client === 'sqlite3') {
+      database.useNullAsDefault = database.useNullAsDefault || false;
     }
 
-    if(config.client === 'mysql') {
-      config.connection.timezone = 'UTC';
-      config.connection.charset = 'utf8mb4';
+    if(database.client === 'mysql') {
+      database.connection.timezone = 'UTC';
+      database.connection.charset = 'utf8mb4';
     }
 
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
-    this.knex = knex(config);
+    this.knex = knex(database);
     this.bookshelf = bookshelf(this.knex);
 
     this.initializeSchemas().then(()=> {

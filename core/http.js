@@ -2,6 +2,7 @@
 
 const express = require('express');
 const net = require('net');
+const config = require('./config');
 const middleware = require('./middleware');
 
 class HTTP {
@@ -32,9 +33,10 @@ class HTTP {
     //TODO: create flexibele static
   }
 
-  open(port, cb = ()=>{}) {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+  open() {
+    let deferred = Promise.defer(),
+        promise = deferred.promise,
+        port = config.get.port;
 
     this.portInUse(port, (inUse)=> {
       if(inUse) {
@@ -42,9 +44,11 @@ class HTTP {
         return;
       }
 
-      this.server.listen(port, cb);
+      this.server.listen(port, ()=> {
+        deferred.resolve(this);
+      });
+
       this.handle();
-      deferred.resolve(this);
     });
 
     return promise;
