@@ -25,6 +25,7 @@
   "homepage": "https://github.com/projecthammer/hammer#readme",
   "dependencies": {
     "async": "2.0.1",
+    "bcryptjs": "^2.3.0",
     "bookshelf": "0.10.2",
     "express": "4.14.0",
     "fs-extra": "^0.30.0",
