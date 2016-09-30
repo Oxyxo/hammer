@@ -4,15 +4,15 @@
     "level": "error"
   },
   "no.plugin.name": {
-    "message": "There is no plugin name defined in the following config:",
+    "message": "There is no plugin name defined in {{config}}",
     "level": "error"
   },
   "no.plugin.main.file": {
     "message": "There is no main plugin file defined or the file does not exists in the following config:",
     "level": "error"
   },
-  "no.compatible.hammer.version.defined": {
-    "message": "There is no compatible hammer version defined in the following config:",
+  "plugin.no.compatible.hammer.version.defined": {
+    "message": "There is no compatible hammer version defined in the following config {{config}}",
     "level": "warning"
   },
   "plugin.name.already.in.use": {
@@ -23,24 +23,16 @@
     "message": "The given plugin path {{path}} does not exists or path is not a directory",
     "level": "warning"
   },
-  "no.plugin.folders.defined": {
-    "message": "There are no plugin folders defined please set a plugin folder in order to load in plugins",
-    "level": "warning"
-  },
-  "no.core.plugin.folder.defined": {
-    "message": "There is no core plugins folder defined. To be able to load in core plugins set a core plugins folder",
-    "level": "warning"
-  },
-  "config.plugins.folder.is.not.array": {
-    "message": "There is no plugins folder set in the config or given config option is not an array",
-    "level": "warning"
-  },
   "plugin.config.not.json": {
-    "message": "The config file {{configFile}} in {{folder}} does not contain JSON",
+    "message": "The config file {{configFile}} does not contain JSON",
     "level": "error"
   },
   "plugin.is.not.class": {
     "message": "The plugin: {{plugin}} does not export a class function",
     "level": "error"
+  },
+  "plugin.not.compatible.with.current.hammer.version": {
+    "message": "The plugin: {{name}} is not compatible with this version of hammer. {{name}} is compatible with the following verion: {{version}}",
+    "level": "warning"
   }
 }

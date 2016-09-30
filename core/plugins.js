@@ -3,123 +3,157 @@
 //FIXME: i am not really happy with how this code flows
 
 const _ = require('lodash');
-const fs = require('fs-extra');
 const log = require('./log');
 const path = require('path');
 const async = require('async');
+const fs = require('fs-extra');
+const semver = require('semver');
 const config = require('./config');
 const modules = require('./modules');
+const pk = require('../package.json');
 const intercom = require('./intercom');
 
 class Plugins {
   constructor() {
     this._plugins = {};
-
-    for(let i=0;i<config.get.plugins.pluginFolders.length;i++) {
-      fs.mkdirsSync(config.get.plugins.pluginFolders[i]);
-    }
-
     modules.extend('plugins', this);
   }
 
   initialize() {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
 
-    if(!config.get.plugins.corePlugins) {
-      return deferred.reject(new Error(log('no.core.plugin.folder.defined')));
+    let plugins = [],
+        push = Array.prototype.push;
+
+    this.mkdirsPluginFolders();
+
+    if(config.get.plugins.corePlugins) {
+      push.apply(plugins, this.collectPlugins(config.get.plugins.corePlugins, true));
     }
-
-    let folders = [
-      this.initializeFolder(config.get.plugins.corePlugins, true)
-    ];
 
     if(config.get.plugins.pluginFolders) {
-      let pluginFolders = config.get.plugins.pluginFolders;
-      if(!config.get.plugins.pluginFolders || !Array.isArray(pluginFolders)) {
-        log('config.plugins.folder.is.not.array');
-      } else {
-        for(let i=0;i<pluginFolders.length;i++) {
-          folders.push(this.initializeFolder(config.get.plugins.pluginFolders[i]));
-        }
-      }
+      push.apply(plugins, this.collectPlugins(config.get.plugins.pluginFolders));
     }
 
-    config.get.plugins = config;
-    Promise.all(folders).then(()=> {
+    if(plugins.length <= 0) {
+      return deferred.resolve();
+    }
+
+    this.runCollectedPlugins(plugins).then(()=> {
       deferred.resolve();
     });
 
     return promise;
   }
 
-  initializeFolder(folders, core = false) {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+  mkdirsPluginFolders() {
+    let pluginFolders = config.get.plugins.pluginFolders;
+
+    for(let i=0;i<pluginFolders.length;i++) {
+      fs.mkdirsSync(pluginFolders[i]);
+    }
+
+    return pluginFolders;
+  }
+
+  collectPlugins(folders, core = false) {
+    if(!folders) {
+      return new Error('no folder defined');
+    }
 
     if(!Array.isArray(folders)) {
       folders = [folders];
     }
 
-    let plugins = [];
+    let _plugins = [];
     for(let i=0;i<folders.length;i++) {
-      plugins.push(this.runPluginsInFolder(folders[i], core));
+      let folder = folders[i];
+      let plugins = fs.readdirSync(folder);
+
+      for(let i=0;i<plugins.length;i++) {
+        let plugin = path.join(folder, plugins[i]);
+        if(this.pathExists(plugin, 'isDirectory')) {
+          _plugins.push({"folder": plugin, "core": core});
+        }
+      }
     }
 
-    Promise.all(plugins).then(()=> {
+    return _plugins;
+  }
+
+  runCollectedPlugins(plugins) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
+    let promises = [];
+    for(let i=0;i<plugins.length;i++) {
+      let plugin = plugins[i];
+      promises.push(this.runPlugin(plugin.folder, plugin.core));
+    }
+
+    Promise.all(promises).then(()=> {
+      deferred.resolve();
+    }).catch(()=> {
+      deferred.reject();
+    });
+
+    return promise;
+  }
+
+  runPlugin(folder, core) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
+    let configPath = path.join(folder, config.get.plugins.configJSON);
+    fs.readJson(configPath, (err, pluginConfig)=> {
+      if(err) {
+        let message = log('plugin.config.not.json', {"config": configPath});
+        return deferred.reject(new Error(message));
+      }
+
+      if(!pluginConfig.name) {
+        let message = log('no.plugin.name', {"config": configPath});
+        return deferred.reject(new Error(message));
+      }
+
+      if(this._plugins[pluginConfig.name]) {
+        let message = log('plugin.name.already.in.use', {"name": pluginConfig.name});
+        return deferred.reject(new Error(message));
+      }
+
+      if(!pluginConfig.hammer) {
+        let message = log('plugin.no.compatible.hammer.version.defined', {"config": pluginConfig});
+        return deferred.reject(new Error(message));
+      }
+
+      let mainFile = path.join(folder, pluginConfig.main);
+      if(!this.pathExists(mainFile, 'isFile')) {
+        let message = log('no.plugin.main.file', {"config": configPath});
+        return deferred.reject(new Error(message));
+      }
+
+      let plugin = require(mainFile);
+      if(!_.isFunction(plugin)) {
+        let message = log('plugin.is.not.class', {"plugin": mainFile});
+        return deferred.reject(new Error(message));
+      }
+
+      if(!semver.satisfies(pk.version, pluginConfig.hammer)) {
+        log('plugin.not.compatible.with.current.hammer.version', {"name": pluginConfig.name, "version": pluginConfig.version});
+      }
+
+      new plugin(global.Hammer);
       deferred.resolve();
     });
 
     return promise;
   }
 
-  runPluginsInFolder(folder, core = false) {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
-
-    const base = folder;
-    if(!fs.existsSync(folder) || !fs.statSync(folder).isDirectory()) {
-      return log('plugin.folder.does.not.exists.or', {"path": folder});
-    }
-
-    let folders = fs.readdirSync(folder).filter((file)=> {
-      return fs.statSync(path.join(folder, file)).isDirectory();
-    });
-
-    if(folders.length <= 0) {
-      return deferred.resolve();
-    }
-
-    folders.forEach((folder, index)=> {
-      const pluginBase = path.join(base, folder);
-      let config = path.join(pluginBase, config.get.plugins.configJSON);
-
-      if(!fs.statSync(config).isFile()) {
-        let message = log('no.plugin.configuration', {"configFile": config.get.plugins.configJSON, "folder": folder});
-        return deferred.reject(new Error(message));
-      }
-
-      fs.readJson(config, (err, json)=> {
-        if(err) {
-          let message = log('plugin.config.not.json', {"configFile": config.get.plugins.configJSON, "folder": folder});
-          return deferred.reject(new Error(message));
-        }
-
-        this.runPlugin(pluginBase, json, core);
-
-        if(index === (folders.length-1)) {
-          return deferred.resolve();
-        }
-      });
-    });
-
-    return promise;
-  }
-
-  fileExists(path, type) {
+  pathExists(path, type) {
     try {
       let stats = fs.lstatSync(path);
-      if(type && !stats[type]) {
+      if(type && !stats[type]()) {
         return false;
       }
     } catch(e) {
@@ -127,57 +161,6 @@ class Plugins {
     }
 
     return true;
-  }
-
-  runPlugin(base, config, core) {
-    if(!config.name) {
-      return log('no.plugin.name', {
-        "code": config
-      });
-    }
-
-    if(this._plugins[config.name]) {
-      return log('plugin.name.already.in.use', {
-        "name": config.name
-      });
-    }
-
-    if(!config.main || !this.fileExists(path.join(base, config.main))) {
-      return log('no.plugin.main.file', {
-        "code": config
-      });
-    }
-
-    if(!config.hammer) {
-      log('no.compatible.hammer.version.defined', {
-        "code": config
-      });
-    }
-
-    //TODO: check if plugin is compatible with current Hammer version
-
-    config.core = core;
-    config.base = base;
-
-    this._plugins[config.name] = config;
-
-    let main = path.join(base, config.main);
-    let plugin = require(main);
-
-    if(!_.isFunction(plugin)) {
-      return log('plugin.is.not.class', {"plugin": main});
-    }
-
-    new plugin(global.Hammer);
-    return config;
-  }
-
-  deactivate() {
-
-  }
-
-  delete() {
-
   }
 }
 
