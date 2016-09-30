@@ -17,6 +17,9 @@
     "modulair",
     "project"
   ],
+  "bin": {
+    "hammer": "bin/hammer.js"
+  },
   "author": "Jeroen Rinzema",
   "license": "MIT",
   "bugs": {
