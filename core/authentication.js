@@ -17,7 +17,7 @@ class Authentication {
     return promise;
   }
 
-  new_token(id) {
+  newToken(id) {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
@@ -68,7 +68,15 @@ class Authentication {
         return deferred.reject(new Error('user not found'));
       }
 
-
+      this.compare(password, user.password).then(()=> {
+        this.newToken(user.id).then((token)=> {
+          promise.resolve(token);
+        }).catch((err)=> {
+          promise.reject(err);
+        });
+      }).catch((err)=> {
+        promise.reject(err);
+      });
     });
 
     return promise;
@@ -88,7 +96,7 @@ class Authentication {
       }
 
       if(!res) {
-        deferred.resolve(new Error('does not compare'));
+        deferred.reject(new Error('does not compare'));
       } else {
         deferred.resolve(res);
       }
