@@ -19,6 +19,10 @@
     "message": "The plugin name: {{name}} is already in use",
     "level": "error"
   },
+  "plugin.folder.does.not.exists.or": {
+    "message": "The given plugin path {{path}} does not exists or path is not a directory",
+    "level": "warning"
+  },
   "no.plugin.folders.defined": {
     "message": "There are no plugin folders defined please set a plugin folder in order to load in plugins",
     "level": "warning"
@@ -30,5 +34,13 @@
   "config.plugins.folder.is.not.array": {
     "message": "There is no plugins folder set in the config or given config option is not an array",
     "level": "warning"
+  },
+  "plugin.config.not.json": {
+    "message": "The config file {{configFile}} in {{folder}} does not contain JSON",
+    "level": "error"
+  },
+  "plugin.is.not.class": {
+    "message": "The plugin: {{plugin}} does not export a class function",
+    "level": "error"
   }
 }
