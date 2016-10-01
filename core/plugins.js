@@ -42,6 +42,8 @@ class Plugins {
 
     this.runCollectedPlugins(plugins).then(()=> {
       deferred.resolve();
+    }).catch(()=> {
+      deferred.reject();
     });
 
     return promise;
