@@ -8,6 +8,7 @@ const middleware = require('./middleware');
 class HTTP {
   constructor() {
     this.server = express();
+    this.express = express;
   }
 
   handle() {
@@ -29,8 +30,8 @@ class HTTP {
     });
   }
 
-  static(url, folder) {
-    //TODO: create flexibele static
+  flexStatic(url, folder) {
+
   }
 
   open() {
