@@ -1,18 +1,34 @@
+const colors = require('colors');
+const hbs = require('handlebars');
 const schema = require('./schema');
-const handlebars = require('handlebars');
+const emoji = require('node-emoji');
+
+colors.setTheme({
+  "error": "red",
+  "warning": "yellow",
+  "depecrated": "red",
+  "debug": "blue",
+  "log": "green",
+  "docs": "yellow"
+});
 
 module.exports = (e, d = {})=> {
   if(!schema[e]) {
-    return console.log(`Log event: ${e} not found`);
+    return console.log(`Log event: ${e} not found`.error);
   }
 
   if(!schema[e].message) {
-    return console.log(`No message found for event: ${e}`);
+    return console.log(`No message found for event: ${e}`.error);
   }
 
-  //TODO: build a log output
-  console.log(e);
-  //console.log(schema[e].message);
+  let event = schema[e],
+      message = hbs.compile(emoji.emojify(event.message));
+  message = message(d)[event.level];
 
-  return schema[e].message;
+  console.log(message);
+  if(event.docs) {
+    console.log(event.docs.docs);
+  }
+
+  return message;
 };
