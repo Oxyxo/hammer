@@ -1,7 +1,5 @@
 'use strict';
 
-//FIXME: i am not really happy with how this code flows
-
 const _ = require('lodash');
 const log = require('./log');
 const path = require('path');
