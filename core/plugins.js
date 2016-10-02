@@ -73,7 +73,7 @@ class Plugins {
 
       for(let i=0;i<plugins.length;i++) {
         let plugin = path.join(folder, plugins[i]);
-        if(this.pathExists(plugin, 'isDirectory')) {
+        if(_.pathExists(plugin, 'isDirectory')) {
           _plugins.push({"folder": plugin, "core": core});
         }
       }
@@ -128,7 +128,7 @@ class Plugins {
       }
 
       let mainFile = path.join(folder, pluginConfig.main);
-      if(!this.pathExists(mainFile, 'isFile')) {
+      if(!_.pathExists(mainFile, 'isFile')) {
         let message = log('no.plugin.main.file', {"config": configPath});
         return deferred.reject(new Error(message));
       }
@@ -148,19 +148,6 @@ class Plugins {
     });
 
     return promise;
-  }
-
-  pathExists(path, type) {
-    try {
-      let stats = fs.lstatSync(path);
-      if(type && !stats[type]()) {
-        return false;
-      }
-    } catch(e) {
-      return false;
-    }
-
-    return true;
   }
 }
 

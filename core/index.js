@@ -8,6 +8,7 @@ const client = require('./client');
 const plugins = require('./plugins');
 const modules = require('./modules');
 const database = require('./database');
+const utilities = require('./utilities');
 const authentication = require('./authentication');
 
 class Hammer {
@@ -22,13 +23,14 @@ class Hammer {
       http.open(),
       authentication.initialize()
     ]).then(()=> {
-      log('hammer.running', {"port": config.get.port});
-      
       new client();
+      utilities.mixin();
       plugins.initialize();
 
       global.Hammer = this;
       deferred.resolve(this);
+
+      log('hammer.running', {"port": config.get.port});
     });
 
     return promise;

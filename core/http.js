@@ -1,13 +1,17 @@
 'use strict';
 
 const net = require('net');
+const _ = require('lodash');
 const log = require('./log');
+const path = require('path');
 const config = require('./config');
 const express = require('express');
+const modules = require('./modules');
 const middleware = require('./middleware');
 
 class HTTP {
   constructor() {
+    modules.extend('http', this);
     this.server = express();
     this.express = express;
   }
@@ -32,7 +36,15 @@ class HTTP {
   }
 
   flexStatic(url, folder) {
+    let base = folder;
+    this.server.get(path.join(url, '/*'), (req, res)=> {
 
+      res.send('ola');
+    });
+
+    return (folder)=> {
+      base = folder;
+    };
   }
 
   open() {
