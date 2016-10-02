@@ -1,8 +1,9 @@
 'use strict';
 
-const express = require('express');
 const net = require('net');
+const log = require('./log');
 const config = require('./config');
+const express = require('express');
 const middleware = require('./middleware');
 
 class HTTP {
@@ -41,8 +42,7 @@ class HTTP {
 
     this.portInUse(port, (inUse)=> {
       if(inUse) {
-        //TODO: throw error port in use
-        return;
+        return deferred.reject(new Error(log('port.in.use', {"port": port})));
       }
 
       this.server.listen(port, ()=> {
