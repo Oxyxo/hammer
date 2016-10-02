@@ -38,8 +38,17 @@ class HTTP {
   flexStatic(url, folder) {
     let base = folder;
     this.server.get(path.join(url, '/*'), (req, res)=> {
+      let param = req.params[0];
+      if(!param) {
+        return res.sendStatus(404);
+      }
 
-      res.send('ola');
+      let file = path.join(base, param);
+      if(!_.pathExists(file, 'isFile')) {
+        return res.sendStatus(404);
+      }
+
+      res.sendFile(file);
     });
 
     return (folder)=> {
