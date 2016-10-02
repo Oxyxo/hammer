@@ -1,4 +1,12 @@
 {
+  "hammer.running": {
+    "message": ":rocket: Hammer is up and running on port {{port}}",
+    "level": "log"
+  },
+  "port.in.use": {
+    "message": "Port: {{port}} is in use and cannot be listened to",
+    "level": "error"
+  },
   "no.plugin.configuration": {
     "message": "There is no plugin configuration file found: {{configFile}} in the folder: {{folder}}",
     "level": "error"
