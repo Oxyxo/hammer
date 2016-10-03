@@ -2,6 +2,7 @@ const colors = require('colors');
 const hbs = require('handlebars');
 const schema = require('./schema');
 const emoji = require('node-emoji');
+const config = require('../config');
 
 colors.setTheme({
   "error": "red",
@@ -13,6 +14,10 @@ colors.setTheme({
 });
 
 module.exports = (e, d = {})=> {
+  if(!config.get.logging) {
+    return;
+  }
+
   if(!schema[e]) {
     return console.log(`Log event: ${e} not found`.error);
   }

@@ -16,7 +16,8 @@ class Config {
         "corePlugins": path.join(__dirname, '../plugins'),
         "pluginFolders": [path.join(process.cwd(), 'plugins')],
         "configJSON": "config.json"
-      }
+      },
+      "logging": true
     };
   }
 
