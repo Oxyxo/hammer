@@ -1,8 +1,9 @@
 process.env.NODE_ENV = 'test';
 
 const path = require('path');
+const Hammer = require('../');
 const fs = require('fs-extra');
-const Hammer = require('../core');
+const should = require('should');
 const config = require('./config');
 
 describe('startup Hammer', function() {
@@ -21,15 +22,38 @@ describe('startup Hammer', function() {
           "filename": path.join(config.get.tmpDir, config.get.databaseFile)
         }
       }
-    }).then((core)=> {
-      if(core) {
-        done();
-      }
+    }).then(()=> {
+      done();
     });
   });
 });
 
-//require('./middleware');
+describe('middleware', function() {
+  it('should call middleware', (done)=> {
+    const Modules = global.Hammer.modules;
+
+    Modules.middleware.on('event', (cb)=> {
+      cb();
+    });
+
+    Modules.middleware.call('event', [], ()=> {
+      done();
+    });
+  });
+
+  it('should collect data over middleware', (done)=> {
+    const Modules = global.Hammer.modules;
+
+    Modules.middleware.on('data_event', (cb, name)=> {
+      cb(`hello ${name}`);
+    });
+
+    Modules.middleware.call('data_event', ['world'], (data)=> {
+      data.should.equal('hello world');
+      done();
+    });
+  });
+});
 
 describe('clean up', function() {
   it('delete tmp dir', (done)=> {
