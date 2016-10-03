@@ -1,6 +1,6 @@
 'use strict';
 
-const database = require('../');
+const database = require('./');
 const _ = require('lodash');
 
 class Commands {
@@ -39,22 +39,24 @@ class Commands {
   }
 
   addColumn(tableName, column, db = database) {
-    db.knex.schema.table(tableName, (table)=> {
+    (db.knex || db).schema.table(tableName, (table)=> {
       this.addTableColumn(tableName, table, column);
     });
   }
 
-  createTable(name, schema, db = database) {
-    db.knex.schema.hasTable(name).then((table)=> {
+  createTable(name, schema, db = database, cb = ()=>{}) {
+    (db.knex || db).schema.hasTable(name).then((table)=> {
       if(table) {
         return;
       }
 
-      db.knex.schema.createTableIfNotExists(name, (table)=> {
+      (db.knex || db).schema.createTableIfNotExists(name, (table)=> {
         _.each(schema, (column, key)=> {
           return this.addTableColumn(table, key, column);
         });
-      }).then();
+      }).then(()=> {
+        cb();
+      });
     });
   }
 }

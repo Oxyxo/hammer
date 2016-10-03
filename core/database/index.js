@@ -65,13 +65,18 @@ class Database {
     let deferred = Promise.defer();
     let promise = deferred.promise;
 
-    let tables = _.keys(schemas);
+    let promises = [],
+        tables = _.keys(schemas);
+
     for(let i=0;i<tables.length;i++) {
       let name = tables[i];
-      commands.createTable(name, schemas[name], this);
+      promises.push(commands.createTable(name, schemas[name], this.knex, this));
     }
 
-    deferred.resolve(this);
+    Promise.all(promises).then(()=> {
+      deferred.resolve(this);
+    });
+
     return promise;
   }
 }
