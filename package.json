@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index",
-    "test": "mocha ./tests/index.js"
+    "test": "mocha ./tests/index.js",
+    "build": "gulp"
   },
   "repository": {
     "type": "git",
@@ -17,9 +18,6 @@
     "modulair",
     "project"
   ],
-  "bin": {
-    "hammer": "bin/hammer.js"
-  },
   "author": "Jeroen Rinzema",
   "license": "MIT",
   "bugs": {
@@ -43,7 +41,13 @@
     "sqlite3": "3.1.4"
   },
   "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-browserify": "^0.5.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-vueify": "0.0.3",
     "mocha": "3.0.2",
-    "should": "11.1.0"
+    "should": "11.1.0",
+    "vue-router": "^2.0.0",
+    "vueify": "^9.2.4"
   }
 }
