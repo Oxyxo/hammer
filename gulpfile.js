@@ -1,16 +1,15 @@
-const fs = require('fs');
 const gulp = require('gulp');
-const vueify = require('vueify');
-const babelify = require('babelify');
-const browserify = require('browserify');
+const minify = require('gulp-minify');
 
 gulp.task('client', function() {
-  browserify('core/client/public/js/app.js')
-            .transform(vueify)
-            .bundle()
-            .pipe(fs.createWriteStream('core/client/public/build/client.js'));
+  gulp.src('core/cliet/public/js/*.js')
+      .pipe(minify())
+      .pipe(gulp.dest('core/client/public/build'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['core/client/public/js/app.js'], ['client']);
+  gulp.watch([
+    'core/client/public/js/*',
+    'core/client/templates/*'
+  ], ['client']);
 });

@@ -41,13 +41,9 @@
     "sqlite3": "3.1.4"
   },
   "devDependencies": {
-    "babelify": "^7.3.0",
-    "browserify": "^13.1.0",
     "gulp": "^3.9.1",
+    "gulp-minify": "0.0.14",
     "mocha": "3.0.2",
-    "should": "11.1.0",
-    "vue": "^2.0.1",
-    "vue-router": "^2.0.0",
-    "vueify": "^9.2.4"
+    "should": "11.1.0"
   }
 }
