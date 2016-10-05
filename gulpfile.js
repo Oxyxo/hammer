@@ -1,17 +1,16 @@
+const fs = require('fs');
 const gulp = require('gulp');
-const rename = require('gulp-rename');
-const vueify = require('gulp-vueify');
-const browserify = require('gulp-browserify');
+const vueify = require('vueify');
+const babelify = require('babelify');
+const browserify = require('browserify');
 
 gulp.task('client', function() {
-  gulp.src('core/client/app.vue')
-      .pipe(browserify({transform: ['vueify'], debug: true}))
-      .pipe(rename({
-        extname: ".js"
-      }))
-      .pipe(gulp.dest('core/client/public/build/'));
+  browserify('core/client/public/js/app.js')
+            .transform(vueify)
+            .bundle()
+            .pipe(fs.createWriteStream('core/client/public/build/client.js'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(['core/client/app.vue'], ['client']);
+  gulp.watch(['core/client/public/js/app.js'], ['client']);
 });
