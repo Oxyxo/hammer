@@ -2,8 +2,12 @@ const gulp = require('gulp');
 const minify = require('gulp-minify');
 
 gulp.task('client', function() {
-  gulp.src('core/cliet/public/js/*.js')
-      .pipe(minify())
+  gulp.src('core/client/public/js/*.js')
+      .pipe(minify({
+        ext: {
+          min: ".min.js"
+        }
+      }))
       .pipe(gulp.dest('core/client/public/build'));
 });
 
