@@ -13,6 +13,7 @@ class Render {
   serve(source) {
     let template = hbs.compile(source);
 
+    console.log('serve');
     return (data)=> {
       return template(Object.assign(this._data, data));
     };
@@ -35,6 +36,10 @@ class Render {
     }
 
     return data;
+  }
+
+  helper(name, cb) {
+    hbs.registerHelper(name, cb);
   }
 }
 
