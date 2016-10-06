@@ -47,6 +47,10 @@
     "message": ":zap:  All plugins are running",
     "level": "log"
   },
+  "plugin.running": {
+    "message": "✓ {{name}} running",
+    "level": "debug"
+  },
   "route.in.use": {
     "message": "The url {{url}} already in use",
     "level": "warning"
