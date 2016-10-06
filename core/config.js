@@ -42,12 +42,8 @@ class Config {
     return Object.assign(this._defaultConfig, this._inputConfig);
   }
 
-  set expand(json) {
+  expandDefault(json) {
     this._defaultConfig = Object.assign(this._defaultConfig, json);
-  }
-
-  get expand() {
-    return this._defaultConfig;
   }
 }
 
