@@ -42,6 +42,8 @@ class Plugins {
 
     this.runCollectedPlugins(plugins).then(()=> {
       deferred.resolve();
+      intercom.emit('plugins running', this._plugins);
+      log('plugins.running');
     }).catch(()=> {
       deferred.reject();
     });
@@ -147,9 +149,17 @@ class Plugins {
 
       //TODO: set timeout to check if callback is set
 
-      let _plugin = new plugin(global.Hammer, ()=> {
+      let _plugin = new plugin(global.Hammer);
+
+      if(_.isFunction(_plugin.then)) {
+        _plugin.then(()=> {
+          deferred.resolve();
+        }).catch(()=> {
+          deferred.reject();
+        });
+      } else {
         deferred.resolve();
-      });
+      }
 
       this._plugins[pluginConfig.name] = _plugin;
     });

@@ -1,6 +1,6 @@
 {
   "hammer.running": {
-    "message": ":rocket: Hammer is up and running on port {{port}}",
+    "message": ":rocket:  Hammer is up and running on port {{port}}",
     "level": "log"
   },
   "port.in.use": {
@@ -42,6 +42,10 @@
   "plugin.not.compatible.with.current.hammer.version": {
     "message": "The plugin: {{name}} is not compatible with this version of hammer. {{name}} is compatible with the following verion: {{version}}",
     "level": "warning"
+  },
+  "plugins.running": {
+    "message": ":zap:  All plugins are running",
+    "level": "log"
   },
   "route.in.use": {
     "message": "The url {{url}} already in use",
