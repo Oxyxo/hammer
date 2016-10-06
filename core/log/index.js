@@ -28,6 +28,7 @@ module.exports = (e, d = {})=> {
 
   let event = schema[e],
       message = hbs.compile(emoji.emojify(event.message));
+
   message = message(d)[event.level];
 
   console.log(message);

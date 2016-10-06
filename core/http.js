@@ -17,7 +17,7 @@ class HTTP {
   }
 
   handle() {
-    this.server.all('*', (req, res, next)=> {
+    this.server.use((req, res, next)=> {
       req.on('end', ()=> {
         middleware.call('after_response', [req]);
       });
@@ -92,6 +92,19 @@ class HTTP {
     });
 
     tester.listen(port);
+  }
+
+  routeInUse(route) {
+    let routes = this.server._router.stack;
+
+    for(let i=0;i<routes.length;i++) {
+      let _route = routes[i];
+      if(_route.regexp.test(route) && _route.route) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 

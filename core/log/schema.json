@@ -42,5 +42,9 @@
   "plugin.not.compatible.with.current.hammer.version": {
     "message": "The plugin: {{name}} is not compatible with this version of hammer. {{name}} is compatible with the following verion: {{version}}",
     "level": "warning"
+  },
+  "route.in.use": {
+    "message": "The url {{url}} already in use",
+    "level": "warning"
   }
 }
