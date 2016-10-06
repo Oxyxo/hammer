@@ -106,6 +106,13 @@ class HTTP {
 
     return false;
   }
+
+  new(method, url, cb) {
+    if(this.routeInUse(url)) {
+      log('route.in.use', {url: url});
+    }
+    this.server[method](url, cb);
+  }
 }
 
 module.exports = new HTTP();

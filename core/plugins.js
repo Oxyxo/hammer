@@ -163,11 +163,7 @@ class Plugins {
 
   route(method, url, cb) {
     url = urljoin(config.get.plugins.routeBase, url);
-    if(http.routeInUse(url)) {
-      log('route.in.use', {url: url});
-    }
-
-    http.server[method](url, cb);
+    http.new(method, url, cb);
   }
 }
 
