@@ -42,8 +42,8 @@ class Plugins {
 
     this.runCollectedPlugins(plugins).then(()=> {
       deferred.resolve();
-      intercom.emit('plugins running', this._plugins);
       log('plugins.running');
+      intercom.emit('plugins running', this._plugins);
     }).catch(()=> {
       deferred.reject();
     });
