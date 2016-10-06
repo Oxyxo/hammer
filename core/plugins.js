@@ -151,6 +151,7 @@ class Plugins {
 
       let _plugin = new plugin(global.Hammer);
 
+      //TODO: check if it is reliable to check if var is promise by checking if .then is set and function
       if(_.isFunction(_plugin.then)) {
         _plugin.then(()=> {
           deferred.resolve();
