@@ -143,11 +143,20 @@ class Plugins {
         log('plugin.not.compatible.with.current.hammer.version', {"name": pluginConfig.name, "version": pluginConfig.version});
       }
 
-      new plugin(global.Hammer);
-      deferred.resolve();
+      //TODO: set timeout to check if callback is set
+
+      let _plugin = new plugin(global.Hammer, ()=> {
+        deferred.resolve();
+      });
+
+      this._plugins[pluginConfig.name] = _plugin;
     });
 
     return promise;
+  }
+
+  get(name) {
+    return this._plugins[name];
   }
 }
 
