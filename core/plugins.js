@@ -161,7 +161,7 @@ class Plugins {
     return this._plugins[name];
   }
 
-  route(method, url, cb) {
+  newRoute(method, url, cb) {
     url = urljoin(config.get.plugins.routeBase, url);
     http.new(method, url, cb);
   }
