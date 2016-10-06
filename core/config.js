@@ -15,7 +15,8 @@ class Config {
       "plugins": {
         "corePlugins": path.join(__dirname, '../plugins'),
         "pluginFolders": [path.join(process.cwd(), 'plugins')],
-        "configJSON": "config.json"
+        "configJSON": "config.json",
+        "routeBase": "/hammer/"
       },
       "logging": true
     };

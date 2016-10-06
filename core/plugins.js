@@ -5,8 +5,10 @@ const log = require('./log');
 const path = require('path');
 const async = require('async');
 const fs = require('fs-extra');
+const http = require('./http');
 const semver = require('semver');
 const config = require('./config');
+const urljoin = require('url-join');
 const modules = require('./modules');
 const pk = require('../package.json');
 const intercom = require('./intercom');
@@ -157,6 +159,15 @@ class Plugins {
 
   get(name) {
     return this._plugins[name];
+  }
+
+  route(method, url, cb) {
+    url = urljoin(config.get.plugins.routeBase, url);
+    if(http.routeInUse(url)) {
+      log('route.in.use', {url: url});
+    }
+
+    http.server[method](url, cb);
   }
 }
 
