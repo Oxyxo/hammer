@@ -1,11 +1,8 @@
 'use strict';
 
-const modules = require('./modules');
-
 class Intercom {
   constructor() {
     this._events = {};
-    modules.extend('intercom', this);
   }
 
   on(e, cb) {
@@ -23,7 +20,7 @@ class Intercom {
     if(!this._events[e]) {
       return;
     }
-    
+
     for(let i=0;i<this._events[e].length;i++) {
       this._events[e][i].apply(null, d);
     }

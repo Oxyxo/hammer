@@ -2,18 +2,15 @@
 
 const _ = require('lodash');
 const hbs = require('handlebars');
-const modules = require('./modules');
 
 class Render {
   constructor() {
-    modules.extend('render', this);
     this._data = [];
   }
 
   serve(source) {
     let template = hbs.compile(source);
 
-    console.log('serve');
     return (data)=> {
       return template(Object.assign(this._data, data));
     };

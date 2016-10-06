@@ -1,12 +1,10 @@
 'use strict';
 
 const async = require('async');
-const modules = require('./modules');
 
 class Middleware {
   constructor() {
     this._events = {};
-    modules.extend('middleware', this);
   }
 
   on(name, fn) {

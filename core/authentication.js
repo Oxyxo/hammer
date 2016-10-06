@@ -7,8 +7,8 @@ const database = require('./database');
 
 class Authentication {
   initialize() {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
 
     this.users = database.model('users');
     this.tokens = database.model('tokens');

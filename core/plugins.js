@@ -9,14 +9,12 @@ const http = require('./http');
 const semver = require('semver');
 const config = require('./config');
 const urljoin = require('url-join');
-const modules = require('./modules');
 const pk = require('../package.json');
 const intercom = require('./intercom');
 
 class Plugins {
   constructor() {
     this._plugins = {};
-    modules.extend('plugins', this);
   }
 
   initialize() {
@@ -150,6 +148,10 @@ class Plugins {
       //TODO: set timeout to check if callback is set
 
       let _plugin = new plugin(global.Hammer);
+
+      promise.then(()=> {
+        log('plugin.running', {"name": pluginConfig.name});
+      });
 
       //TODO: check if it is reliable to check if var is promise by checking if .then is set and function
       if(_.isFunction(_plugin.then)) {
