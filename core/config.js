@@ -2,7 +2,7 @@ const path = require('path');
 
 class Config {
   constructor() {
-    this._config = {
+    this._defaultConfig = {
       "port": 8080,
       "database": {
         "client": "sqlite3",
@@ -19,18 +19,28 @@ class Config {
       },
       "logging": true
     };
+
+    this._inputConfig = {};
   }
 
   set set(json) {
-    this._config = Object.assign(this._config, json);
+    this._inputConfig = Object.assign(this._inputConfig, json);
   }
 
   get set() {
-    return this._config;
+    return this._inputConfig;
   }
 
   get get() {
-    return this._config;
+    return Object.assign(this._defaultConfig, this._inputConfig);
+  }
+
+  set expand(json) {
+    this._defaultConfig = Object.assign(this._defaultConfig, json);
+  }
+
+  get expand() {
+    return this._defaultConfig;
   }
 }
 
