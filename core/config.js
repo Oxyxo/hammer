@@ -1,4 +1,5 @@
 const path = require('path');
+const render = require('./render');
 
 class Config {
   constructor() {
@@ -22,6 +23,11 @@ class Config {
     };
 
     this._inputConfig = {};
+
+    render.setRenderData(()=> {
+      //TODO: should we remove sensitive data?
+      return this.get;
+    });
   }
 
   set set(json) {
