@@ -38,7 +38,8 @@
     "node-emoji": "^1.4.1",
     "node-uuid": "^1.4.7",
     "semver": "^5.3.0",
-    "sqlite3": "3.1.4"
+    "sqlite3": "3.1.4",
+    "url-join": "^1.1.0"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
