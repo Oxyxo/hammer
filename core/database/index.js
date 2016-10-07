@@ -61,8 +61,17 @@ class Database {
   }
 
   addColumnToTable(table, colmn) {
-
     commands.addColumn(table, colmn);
+  }
+
+  addColumnsToTable(table, columns) {
+    if(!_.isArray(columns)) {
+      return new Error('given columns is not a array');
+    }
+
+    for(let i=0;i<columns.length;i++) {
+      commands.addColumn(table, columns[i]);
+    }
   }
 
   initializeSchemas() {
