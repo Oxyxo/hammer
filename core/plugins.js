@@ -1,5 +1,7 @@
 'use strict';
 
+//TODO: Make plausibility to add dependencies
+
 const _ = require('lodash');
 const log = require('./log');
 const path = require('path');
