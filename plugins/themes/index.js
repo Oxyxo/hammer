@@ -76,8 +76,22 @@ class Themes {
     return promise;
   }
 
-  activateTheme(theme) {
+  getActiveTheme() {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
 
+    db.table('themes').where('active', 1).then((theme)=> {
+      if(!theme) {
+        return deferred.reject();
+      }
+      deferred.resolve(theme[0]);
+    });
+
+    return promise;
+  }
+
+  activateTheme(theme) {
+    db.table('themes').where('folder', theme).update('active', 1);
   }
 }
 
