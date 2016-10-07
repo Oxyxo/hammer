@@ -44,6 +44,10 @@ class Database {
     return this.bookshelf.Model.extend(options);
   }
 
+  table(table) {
+    return this.knex(table);
+  }
+
   newTable(name, schema) {
     commands.createTable(name, schema, this);
   }
