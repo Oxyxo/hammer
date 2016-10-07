@@ -24,12 +24,14 @@ class Themes {
       }
     });
 
-    db.newTable('themes', {
-      "id": {"type": "increments", "nullable": false, "primary": true},
-      "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
-      "folder": {"type": "string", "nullable": false},
-      "active": {"type": "boolean", "nullable": false, "defaultTo": false}
-    }).then(()=> {
+    Promise.all([
+      db.newTable('themes', {
+        "id": {"type": "increments", "nullable": false, "primary": true},
+        "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
+        "folder": {"type": "string", "nullable": false},
+        "active": {"type": "boolean", "nullable": false, "defaultTo": false}
+      })
+    ]).then(()=> {
       this.collectThemes(config.get.themes.themesFolder).then(deferred.resolve);
     });
 
