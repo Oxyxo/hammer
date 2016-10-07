@@ -44,10 +44,13 @@ class Commands {
     });
   }
 
-  createTable(name, schema, db = database, cb = ()=>{}) {
+  createTable(name, schema, db = database) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
     (db.knex || db).schema.hasTable(name).then((table)=> {
       if(table) {
-        return;
+        return deferred.resolve();
       }
 
       (db.knex || db).schema.createTableIfNotExists(name, (table)=> {
@@ -55,9 +58,11 @@ class Commands {
           return this.addTableColumn(table, key, column);
         });
       }).then(()=> {
-        cb();
+        deferred.resolve();
       });
     });
+
+    return promise;
   }
 }
 

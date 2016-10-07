@@ -24,8 +24,8 @@ class Database {
       database.connection.charset = 'utf8mb4';
     }
 
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
 
     this.knex = knex(database);
     this.bookshelf = bookshelf(this.knex);
@@ -49,15 +49,23 @@ class Database {
   }
 
   newTable(name, schema) {
-    commands.createTable(name, schema, this);
+    return commands.createTable(name, schema, this);
   }
 
   newTables(tables) {
-    let keys = _.keys(tables);
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
+    let keys = _.keys(tables),
+        promises = [];
+
     for(let i=0;i<keys.length;i++) {
       let columns = tables[keys[i]];
-      this.newTable(keys[i], columns);
+      promises.push(this.newTable(keys[i], columns));
     }
+
+    Promise.all(promises).then(deferred.resolve);
+    return promise;
   }
 
   addColumnToTable(table, colmn) {
@@ -75,15 +83,15 @@ class Database {
   }
 
   initializeSchemas() {
-    let deferred = Promise.defer();
-    let promise = deferred.promise;
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
 
     let promises = [],
         tables = _.keys(schemas);
 
     for(let i=0;i<tables.length;i++) {
       let name = tables[i];
-      promises.push(commands.createTable(name, schemas[name], this.knex, this));
+      promises.push(commands.createTable(name, schemas[name], this.knex));
     }
 
     Promise.all(promises).then(()=> {
