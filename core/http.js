@@ -19,7 +19,7 @@ class HTTP {
   handle() {
     this.server.use((req, res, next)=> {
       req.on('end', ()=> {
-        middleware.call('after_request_response', [req]);
+        middleware.call('afterRequestResponse', [req]);
       });
 
       middleware.call('request', [req, res], (_res)=> {
