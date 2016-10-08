@@ -149,15 +149,17 @@ class Plugins {
 
       //TODO: set timeout to check if callback is set
 
-      let _plugin = new plugin(global.Hammer);
+      let _plugin = new plugin();
 
       promise.then(()=> {
         log('plugin.running', {"name": pluginConfig.name});
       });
 
       //TODO: check if it is reliable to check if var is promise by checking if .then is set and function
+      //TODO: i don't like how a plugin core is set via the resolve callback
       if(_.isFunction(_plugin.then)) {
-        _plugin.then(()=> {
+        _plugin.then((plugin)=> {
+          this._plugins[pluginConfig.name] = plugin;
           deferred.resolve();
         }).catch(()=> {
           deferred.reject();
@@ -172,8 +174,8 @@ class Plugins {
     return promise;
   }
 
-  get(name) {
-    return this._plugins[name];
+  get get() {
+    return this._plugins;
   }
 
   newRoute(method, url, cb) {
