@@ -19,7 +19,11 @@ class Config {
         "configJSON": "config.json",
         "routeBase": "/hammer/"
       },
-      "logging": true
+      "logging": true,
+      "requirePrefix": { //TODO: improve the regex? (i am not a regex jedi)
+        "base": /^@hammer/,
+        "module": /(?!\/)(\w+)$/
+      }
     };
 
     this._inputConfig = {};

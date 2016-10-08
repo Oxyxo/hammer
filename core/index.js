@@ -21,13 +21,13 @@ class Hammer {
 
     config.set = _config;
 
+    new utilities(this);
     Promise.all([
       database.open(),
       http.open(),
       authentication.initialize()
     ]).then(()=> {
       new client();
-      utilities.mixin();
       plugins.initialize();
 
       global.Hammer = this;
@@ -36,6 +36,7 @@ class Hammer {
       log('hammer.running', {"port": config.get.port});
     });
 
+    //TODO: move modules extend to their own files/modules?
     modules.extend('log', log);
     modules.extend('intercom', intercom);
     modules.extend('middleware', middleware);
@@ -53,6 +54,10 @@ class Hammer {
 
   get modules() {
     return modules.collect;
+  }
+
+  get plugins() {
+    return plugins;
   }
 }
 
