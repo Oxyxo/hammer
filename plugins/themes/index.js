@@ -1,11 +1,8 @@
 'use strict';
 
-const Hammer = global.Hammer;
-const Modules = Hammer.modules;
-
-const db = Modules.database;
-const config = Modules.config;
-const plugins = Modules.plugins;
+const db = require('@hammer/database');
+const config = require('@hammer/config');
+const plugins = require('@hammer/plugins');
 
 const _ = require('lodash');
 const path = require('path');
@@ -20,6 +17,7 @@ class Themes {
     config.expandDefault({
       "themes": {
         "themesFolder": path.join(process.cwd(), 'themes'),
+        "templatesFolder": "templates",
         "configFile": "theme.json"
       }
     });
@@ -32,7 +30,9 @@ class Themes {
         "active": {"type": "boolean", "nullable": false, "defaultTo": false}
       })
     ]).then(()=> {
-      this.collectThemes(config.get.themes.themesFolder).then(deferred.resolve);
+      this.collectThemes(config.get.themes.themesFolder).then(()=> {
+        deferred.resolve(this);
+      });
     });
 
     return promise;
@@ -95,6 +95,23 @@ class Themes {
 
   activateTheme(theme) {
     db.table('themes').where('folder', theme).update('active', 1);
+  }
+
+  getTemplate(template) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
+    this.getActiveTheme().then((theme)=> {
+      let template = path.join(config.get.themes.themesFolder, theme.folder, config.get.themes.templatesFolder);
+
+      if(!_.pathExists(template)) {
+        return deferred.reject(new Error('template does not exists'));
+      }
+
+      deferred.resolve(fs.readFileSync(template, 'utf-8'));
+    });
+
+    return promise;
   }
 }
 
