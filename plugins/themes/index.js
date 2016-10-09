@@ -63,6 +63,7 @@ class Themes {
             configPath = path.join(base, folder, config.get.themes.configFile);
 
         if(!_.pathExists(configPath)) {
+          //TODO: log error when no config found.
           console.log('no config');return;
         }
 
@@ -102,13 +103,17 @@ class Themes {
         promise = deferred.promise;
 
     this.getActiveTheme().then((theme)=> {
-      let template = path.join(config.get.themes.themesFolder, theme.folder, config.get.themes.templatesFolder);
+      if(!theme) {
+        return deferred.reject(new Error('no active theme'));
+      }
 
-      if(!_.pathExists(template)) {
+      let file = path.join(config.get.themes.themesFolder, theme.folder, config.get.themes.templatesFolder, template);
+
+      if(!_.pathExists(file)) {
         return deferred.reject(new Error('template does not exists'));
       }
 
-      deferred.resolve(fs.readFileSync(template, 'utf-8'));
+      deferred.resolve(fs.readFileSync(file, 'utf-8'));
     });
 
     return promise;
