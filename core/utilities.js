@@ -44,8 +44,8 @@ class Utilities {
             return Hammer.modules[module];
           }
 
-          if(Hammer.plugins[module]) {
-            return Hammer.plugins[module];
+          if(Hammer.plugins.get[module]) {
+            return Hammer.plugins.get[module];
           }
         }
 
