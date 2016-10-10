@@ -8,6 +8,7 @@ const client = require('./client');
 const render = require('./render');
 const plugins = require('./plugins');
 const modules = require('./modules');
+const _require = require('./require');
 const intercom = require('./intercom');
 const database = require('./database');
 const utilities = require('./utilities');
