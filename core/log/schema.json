@@ -1,6 +1,10 @@
 {
   "hammer.running": {
-    "message": ":rocket:  Hammer is up and running on port {{port}}",
+    "message": ":hammer:  Hammer core is up and running",
+    "level": "log"
+  },
+  "http.server.running": {
+    "message": ":rocket:  HTTP server up and running on port: {{port}}",
     "level": "log"
   },
   "port.in.use": {
@@ -50,9 +54,5 @@
   "plugin.running": {
     "message": "✓ {{name}} running",
     "level": "debug"
-  },
-  "route.in.use": {
-    "message": "The url {{url}} already in use",
-    "level": "warning"
   }
 }
