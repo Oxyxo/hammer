@@ -45,6 +45,7 @@ class Hammer {
     modules.extend('config', config);
     modules.extend('authentication', authentication);
     modules.extend('render', render);
+    modules.extend('require', _require);
 
     return promise;
   }

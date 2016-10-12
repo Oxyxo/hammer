@@ -9,6 +9,7 @@ const modules = require('./modules');
 
 class Require {
   constructor() {
+    this.packages = {};
     this.originalRequire = Module.prototype.require;
     Module.prototype.require = this.require();
   }
@@ -31,6 +32,10 @@ class Require {
           if(Hammer.plugins.get[module]) {
             return Hammer.plugins.get[module];
           }
+
+          if(this.packages[module]) {
+            return this.packages[module];
+          }
         }
 
         return Hammer;
@@ -38,6 +43,20 @@ class Require {
 
       return self.originalRequire.apply(this, arguments);
     };
+  }
+
+  extend(name, fn) {
+    if(this.packages[name]) {
+      throw new Error(`the package ${name} already exists and cannot be created`);
+    }
+    this.packages[name] = fn;
+  }
+
+  remove(name) {
+    if(!this.package[name]) {
+      throw new Error(`the package ${name} was not found and cannot be removed. Plugins or core modules can not be removed via this function.`);
+    }
+    delete this.packages[name];
   }
 }
 
