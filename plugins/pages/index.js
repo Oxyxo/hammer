@@ -1,9 +1,9 @@
 'use strict';
 
+const http = require('@hammer/http');
 const db = require('@hammer/database');
 const config = require('@hammer/config');
 const render = require('@hammer/render');
-const middleware = require('@hammer/middleware');
 
 module.exports = class Pages {
   constructor() {
@@ -31,21 +31,30 @@ module.exports = class Pages {
   }
 
   handle() {
-    let Pages = db.table('pages');
+    let Pages = db.model('pages');
+    http.router.get('*', function *(next) {
+      const themes = require('@hammer/themes');
+      let page = yield Pages.where('url', this.url).fetch();
+      if(!page) {
+        return yield *next;
+      }
 
-    middleware.on('request', (next, req, res)=> {
-      Pages.where('url', req.url).then((pages)=> {
-        if(!pages || !pages[0]) {
-          return next();
-        }
+      page = page.toJSON();
+      if(page.data) {
+        console.log(page.data);
+      }
 
-        let page = pages[0];
-        if(page.data) {
-          page.data = JSON.parse(page.data);
-        }
+      var template = yield themes.getTemplate(page.template).catch(()=> {});
 
-        next(res.send(Plugins.get.themes.getTemplate(page.template)));
-      });
+      if(!template) {
+        //TODO: send message back when no template found
+        this.status = 500;
+        return;
+      }
+
+      this.status = 200;
+      this.body = template;
+      return;
     });
   }
 
