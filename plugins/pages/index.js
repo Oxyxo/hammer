@@ -52,8 +52,11 @@ module.exports = class Pages {
         return;
       }
 
+      let source = render.serve(template);
+
       this.status = 200;
-      this.body = template;
+      this.body = source();
+      
       return;
     });
   }

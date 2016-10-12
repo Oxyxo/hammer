@@ -30,7 +30,7 @@ class Config {
 
     render.setDefaultRenderData(()=> {
       //TODO: should we remove sensitive data?
-      return this.get;
+      return {"config": this.get};
     });
   }
 
