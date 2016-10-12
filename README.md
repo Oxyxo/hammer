@@ -15,7 +15,7 @@ or
 yarn add projecthammer
 ```
 
-The next thing that we have to do is create a small project that includes and starts Hammer.
+The next thing that we have to do is create a small project that starts Hammer.
 
 ```
 let Hammer = require('../hammer');
