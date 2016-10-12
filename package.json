@@ -9,8 +9,8 @@
     "build": "gulp"
   },
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/projecthammer/hammer.git"
+    "url": "git+https://github.com/projecthammer/hammer.git",
+    "type": "git"
   },
   "keywords": [
     "cms",
