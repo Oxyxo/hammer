@@ -19,12 +19,14 @@ class Response {
    * responseHandle makes it easier to send for example
    * json back to the client without setting the response
    * type's.
-   * 
+   *
    * @method   Response@responseHandle
    * @return {Generator} The returned generator can be used by koa
    */
   responseHandle() {
     return function *(next) {
+      var startTime = Date.now();
+
       yield *next;
 
       let body = this.body;
@@ -32,6 +34,9 @@ class Response {
         this.response.type = 'json';
         return;
       }
+
+      var delta = Math.ceil(Date.now() - startTime);
+      this.set('X-Response-Time', delta + 'ms');
     };
   }
 }
