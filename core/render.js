@@ -16,7 +16,7 @@ class Render {
     };
   }
 
-  setRenderData(data) {
+  setDefaultRenderData(data) {
     this._data.push(data);
   }
 
