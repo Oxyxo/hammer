@@ -9,10 +9,28 @@ const path = require('path');
 const config = require('../config');
 const router = require('koa-router');
 const modules = require('../modules');
+const Response = require('./response');
 const middleware = require('../middleware');
 
-class HTTP {
+/**
+ * This class handles the http server and
+ * all incomming and outgoing requests.
+ *
+ * @extends Response
+ * @class HTTP
+ */
+class HTTP extends Response {
+  /**
+   * In the this constructor are the nessesary
+   * variables set up to start a http server.
+   * Also is the router included that handles all
+   * request methods + requests.
+   *
+   * @constructs HTTP
+   */
   constructor() {
+    super();
+
     modules.extend('http', this);
     this.server = Koa();
     this.koa = Koa;
@@ -24,6 +42,7 @@ class HTTP {
     this.server.use(this.fallback.routes());
 
     this.customNotFound();
+    this.router.use(this.responseHandle());
   }
 
   customNotFound() {
@@ -32,37 +51,6 @@ class HTTP {
       this.body = '😱 Not Found';
       this.status = 404;
     });
-  }
-
-  readFile() {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    //read a file and return
-
-    return promise;
-  }
-
-  handle() {
-    // this.server.use((req, res, next)=> {
-    //   for(let i=0;i<this.routes.length;i++) {
-    //
-    //   }
-    //   req.on('end', ()=> {
-    //     middleware.call('afterRequestResponse', [req]);
-    //   });
-    //
-    //   middleware.call('request', [req, res], (_res)=> {
-    //     if(_res) {
-    //       for(let i=0;i<_res.length;i++) {
-    //         if(_res[i]) {
-    //           return;
-    //         }
-    //       }
-    //     }
-    //     next();
-    //   });
-    // });
   }
 
   open() {
@@ -79,8 +67,6 @@ class HTTP {
         log('http.server.running', {"port": config.get.port});
         deferred.resolve(this);
       });
-
-      this.handle();
     });
 
     return promise;
