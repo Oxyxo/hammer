@@ -11,8 +11,8 @@ class Render {
   serve(source) {
     let template = hbs.compile(source);
 
-    return (data)=> {
-      return template(Object.assign(this._data, data));
+    return (data = {})=> {
+      return template(Object.assign(this.renderData, data));
     };
   }
 
