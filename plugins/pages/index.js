@@ -5,7 +5,20 @@ const db = require('@hammer/database');
 const config = require('@hammer/config');
 const render = require('@hammer/render');
 
+/**
+ * This class handles Everything
+ * that has something to do with Pages
+ *
+ * @class Pages
+ */
 module.exports = class Pages {
+  /**
+   * This constructor function expands
+   * the default config and creates the db table
+   * pages.
+   *
+   * @constructs Pages
+   */
   constructor() {
     let deferred = Promise.defer(),
         promise = deferred.promise;
@@ -30,8 +43,17 @@ module.exports = class Pages {
     return deferred;
   }
 
+  /**
+   * This handle is handling all incomming
+   * GET requests. the function checks if the
+   * page/url is found in the database and returns
+   * a renderd page.
+   *
+   * @method   Pages@handle
+   */
   handle() {
     let Pages = db.model('pages');
+    //This handle checks if the requested page/url is stored in the DB
     http.router.get('*', function *(next) {
       const themes = require('@hammer/themes');
       let page = yield Pages.where('url', this.url).fetch();
@@ -41,7 +63,9 @@ module.exports = class Pages {
 
       page = page.toJSON();
       if(page.data) {
-        console.log(page.data);
+        //We have to parse the stored JSON in the DB
+        let parsed = JSON.parse(page.data);
+        page.data = render.pageData(parsed);
       }
 
       var template = yield themes.getTemplate(page.template).catch(()=> {});
@@ -55,8 +79,8 @@ module.exports = class Pages {
       let source = render.serve(template);
 
       this.status = 200;
-      this.body = source();
-      
+      this.body = source(page.data);
+
       return;
     });
   }
