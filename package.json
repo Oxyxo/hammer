@@ -36,6 +36,7 @@
     "koa": "^1.2.4",
     "koa-router": "^5.4.0",
     "lodash": "4.16.1",
+    "marked": "^0.3.6",
     "moment": "^2.15.1",
     "node-emoji": "^1.4.1",
     "node-uuid": "^1.4.7",
