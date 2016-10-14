@@ -36,7 +36,7 @@ class Response {
       }
 
       var delta = Math.ceil(Date.now() - startTime);
-      this.set('X-Response-Time', delta + 'ms');
+      this.set('X-Response-Time', `${delta} ms`);
     };
   }
 }
