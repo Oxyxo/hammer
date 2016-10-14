@@ -159,7 +159,7 @@ block-stream@*:
   dependencies:
     inherits "~2.0.0"
 
-bluebird@^3.4.3, bluebird@^3.4.6:
+bluebird, bluebird@^3.4.3, bluebird@^3.4.6:
   version "3.4.6"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.6.tgz#01da8d821d87813d158967e743d5fe6c62cf8c0f"
 
@@ -376,6 +376,10 @@ debug@*, debug@^2.1.3, debug@^2.2.0, debug@~2.2.0, debug@2.2.0:
 decamelize@^1.0.0, decamelize@^1.1.2:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/decamelize/-/decamelize-1.2.0.tgz#f6534d15148269b20352e7bee26f501f9a191290"
+
+deep-aplus@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/deep-aplus/-/deep-aplus-1.0.2.tgz#42a400df5d341b5421b066d7e17c6be8aa1f97e7"
 
 deep-equal@~1.0.0:
   version "1.0.1"
@@ -1924,6 +1928,12 @@ pretty-hrtime@^1.0.0:
 process-nextick-args@~1.0.6:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/process-nextick-args/-/process-nextick-args-1.0.7.tgz#150e20b756590ad3f91093f25a4f2ad8bff30ba3"
+
+promised-handlebars:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/promised-handlebars/-/promised-handlebars-2.0.1.tgz#a662a4278895b4c13f815ecf223691ac3ca7fdca"
+  dependencies:
+    deep-aplus "^1.0.2"
 
 qs@~6.2.0:
   version "6.2.1"

@@ -69,7 +69,6 @@ module.exports = class Pages {
       }
 
       var template = yield themes.getTemplate(page.template).catch(()=> {});
-
       if(!template) {
         //TODO: send message back when no template found
         this.status = 500;
@@ -77,10 +76,8 @@ module.exports = class Pages {
       }
 
       let source = render.serve(template);
-
       this.status = 200;
-      this.body = source(page.data);
-
+      this.body = yield source(page.data);
       return;
     });
   }

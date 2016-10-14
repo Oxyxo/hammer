@@ -41,7 +41,7 @@ class Hammer {
     modules.extend('log', log);
     modules.extend('intercom', intercom);
     modules.extend('middleware', middleware);
-    modules.extend('plugins', plugins);
+    modules.extend('plugins', plugins.get);
     modules.extend('config', config);
     modules.extend('authentication', authentication);
     modules.extend('render', render);
