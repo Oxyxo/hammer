@@ -61,6 +61,22 @@ class Plugins {
     return pluginFolders;
   }
 
+  deactivatePlugin(plugin) {
+    //TODO: create error logs
+    if(!this._plugins[plugin]) {
+      return;
+    }
+
+    let p = this._plugins[plugin];
+
+    if(!p.deactivate) {
+      return;
+    }
+
+    p.deactivate();
+    delete this._plugins[plugin];
+  }
+
   collectPlugins(folders, core = false) {
     if(!folders) {
       return new Error('no folder defined');
