@@ -89,6 +89,40 @@ class HTTP extends Response {
 
     tester.listen(port);
   }
+
+  get route() {
+    return new Proxy({}, {
+      get: (func, method)=> {
+        return (url, fn)=> {
+          this.router[method](url, fn);
+
+          return new Proxy({
+            destroy: ()=> {
+              let stack = this.router.stack;
+
+              if(!Array.isArray(fn)) {
+                fn = [fn];
+              }
+
+              for(let i=0;i<stack.length;i++) {
+                let route = stack[i];
+
+                for(let i=0;i<fn.length;i++) {
+                  if(route.stack.indexOf(fn[i]) >= 0) {
+                    delete this.router.stack[i];
+                  }
+                }
+              }
+            }
+          }, {});
+        };
+      }
+    });
+  }
+
+  get new() {
+    return this;
+  }
 }
 
 module.exports = new HTTP();
