@@ -24,13 +24,17 @@ class Require {
         if(module && _.isArray(module)) {
           module = module[0];
 
-          if(Hammer.modules[module]) {
-            return Hammer.modules[module];
-          }
+          return new Proxy({}, {
+            get: function(func, name) {
+              if(Hammer.modules[module]) {
+                return Hammer.modules[module][name];
+              }
 
-          if(Hammer.plugins.get[module]) {
-            return Hammer.plugins.get[module];
-          }
+              if(Hammer.plugins.get[module]) {
+                return Hammer.plugins.get[module][name];
+              }
+            }
+          });
         }
 
         return Hammer;
