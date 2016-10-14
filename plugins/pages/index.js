@@ -37,7 +37,7 @@ module.exports = class Pages {
     ]).then(deferred.resolve);
 
     this.handle();
-    return deferred;
+    return promise;
   }
 
   /**
@@ -80,6 +80,7 @@ module.exports = class Pages {
   }
 
   deactivate() {
+    console.log('deactivate');
     for(let i=0;i<this._routes.length;i++) {
       let route = this._routes[i];
       route.destroy();
