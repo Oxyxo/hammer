@@ -44,20 +44,6 @@ class Require {
       return self.originalRequire.apply(this, arguments);
     };
   }
-
-  extend(name, fn) {
-    if(this.packages[name]) {
-      throw new Error(`the package ${name} already exists and cannot be created`);
-    }
-    this.packages[name] = fn;
-  }
-
-  remove(name) {
-    if(!this.package[name]) {
-      throw new Error(`the package ${name} was not found and cannot be removed. Plugins or core modules can not be removed via this function.`);
-    }
-    delete this.packages[name];
-  }
 }
 
 module.exports = new Require();
