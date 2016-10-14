@@ -9,7 +9,6 @@ const modules = require('./modules');
 
 class Require {
   constructor() {
-    this.packages = {};
     this.originalRequire = Module.prototype.require;
     Module.prototype.require = this.require();
   }
@@ -31,10 +30,6 @@ class Require {
 
           if(Hammer.plugins.get[module]) {
             return Hammer.plugins.get[module];
-          }
-
-          if(self.packages[module]) {
-            return self.packages[module];
           }
         }
 
