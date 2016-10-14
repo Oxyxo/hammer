@@ -11,6 +11,7 @@ const router = require('koa-router');
 const modules = require('../modules');
 const Response = require('./response');
 const middleware = require('../middleware');
+const send = require('koa-send');
 
 /**
  * This class handles the http server and
@@ -47,9 +48,8 @@ class HTTP extends Response {
 
   customNotFound() {
     this.fallback.get('*', function *() {
-      //TODO: get 404 page from active theme
-      this.body = '😱 Not Found';
       this.status = 404;
+      yield send(this, 'templates/404.html', {root:__dirname});
     });
   }
 

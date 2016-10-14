@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const _ = require('lodash');
-const send = require('koa-send');
 
 /**
  * This class handles all outgoing request
@@ -40,10 +39,6 @@ class Response {
       var delta = Math.ceil(Date.now() - startTime);
       this.set('X-Response-Time', `${delta} ms`);
     };
-  }
-
-  send(...args) {
-    send.apply(this, args);
   }
 }
 
