@@ -2,7 +2,9 @@
 
 const _ = require('lodash');
 const marked = require('marked');
-const hbs = require('handlebars');
+const bluebird = require('bluebird');
+const promiseHbs = require('promised-handlebars');
+const hbs = promiseHbs(require('handlebars'), {Promise, bluebird});
 
 /**
  * This function handles all render functions.
@@ -80,8 +82,17 @@ class Render {
     return data;
   }
 
-  helper(name, cb) {
-    hbs.registerHelper(name, cb);
+  helper(name, fn) {
+    hbs.registerHelper(name, function() {
+      let deferred = Promise.defer(),
+          promise = deferred.promise;
+
+      let args = Object.keys(arguments).map(x => arguments[x]);
+      args.unshift(deferred);
+
+      fn.apply(this, args);
+      return promise;
+    });
   }
 }
 
