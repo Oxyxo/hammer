@@ -4,6 +4,7 @@ const http = require('@hammer/http');
 const db = require('@hammer/database');
 const config = require('@hammer/config');
 const render = require('@hammer/render');
+const themes = require('@hammer/themes');
 
 /**
  * This class handles Everything
@@ -55,7 +56,6 @@ module.exports = class Pages {
     let Pages = db.model('pages');
     //This handle checks if the requested page/url is stored in the DB
     http.router.get('*', function *(next) {
-      const themes = require('@hammer/themes');
       let page = yield Pages.where('url', this.url).fetch();
       if(!page) {
         return yield *next;

@@ -1,8 +1,8 @@
 'use strict';
 
 const render = require('@hammer/render');
+const themes = require('@hammer/themes');
 const intercom = require('@hammer/intercom');
-const plugins = require('@hammer/plugins');
 
 class Helpers {
   constructor(Hammer) {
@@ -16,8 +16,7 @@ class Helpers {
   }
 
   include(promise, ...args) {
-    let themes = plugins.themes,
-        promises = [];
+    let promises = [];
 
     if(1 >= args.length) {
       //TODO: optionally log here that include tag does not contain template
