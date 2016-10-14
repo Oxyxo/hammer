@@ -34,7 +34,9 @@ module.exports = class Pages {
         "template": {"type": "string", "nullable": false},
         "data": {"type": "json", "nullable": true}
       })
-    ]).then(deferred.resolve);
+    ]).then(()=> {
+      deferred.resolve(this);
+    });
 
     this.handle();
     return promise;
