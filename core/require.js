@@ -33,8 +33,8 @@ class Require {
             return Hammer.plugins.get[module];
           }
 
-          if(this.packages[module]) {
-            return this.packages[module];
+          if(self.packages[module]) {
+            return self.packages[module];
           }
         }
 
