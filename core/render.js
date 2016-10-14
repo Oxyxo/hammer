@@ -82,8 +82,8 @@ class Render {
     return data;
   }
 
-  safeString(...args) {
-    return new hbs.SafeString.apply(this, args);
+  safeString(string) {
+    return new hbs.SafeString(string);
   }
 
   helper(name, fn) {
