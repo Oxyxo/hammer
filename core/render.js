@@ -82,6 +82,10 @@ class Render {
     return data;
   }
 
+  safeString(string) {
+    return hbs.safeString(string);
+  }
+
   helper(name, fn) {
     hbs.registerHelper(name, function() {
       let deferred = Promise.defer(),
