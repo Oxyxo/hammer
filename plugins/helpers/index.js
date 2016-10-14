@@ -31,7 +31,7 @@ class Helpers {
 
     Promise.all(promises).then((data)=> {
       return promise.resolve(render.safeString(data.join('')));
-    }).catch((...args)=> {
+    }).catch((error)=> {
       //TODO: log error Front end or backend?
       return promise.resolve();
     });
