@@ -24,11 +24,7 @@ module.exports = class Pages {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    config.expandDefault({
-      "pages": {
-
-      }
-    });
+    this._routes = [];
 
     Promise.all([
       db.newTable('pages', {
@@ -54,8 +50,7 @@ module.exports = class Pages {
    */
   handle() {
     let Pages = db.model('pages');
-    //This handle checks if the requested page/url is stored in the DB
-    http.router.get('*', function *(next) {
+    let route = http.new.route.get('*', function *(next) {
       let page = yield Pages.where('url', this.url).fetch();
       if(!page) {
         return yield *next;
@@ -80,9 +75,14 @@ module.exports = class Pages {
       this.body = yield source(page.data);
       return;
     });
+
+    this._routes.push(route);
   }
 
-  servePage() {
-
+  deactivate() {
+    for(let i=0;i<this._routes.length;i++) {
+      let route = this._routes[i];
+      route.destroy();
+    }
   }
 };
