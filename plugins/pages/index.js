@@ -82,7 +82,6 @@ module.exports = class Pages {
   }
 
   deactivate() {
-    console.log('deactivate');
     for(let i=0;i<this._routes.length;i++) {
       let route = this._routes[i];
       route.destroy();
