@@ -1,5 +1,6 @@
 'use strict';
 
+//TODO: Check if we can clean this code up and make it the code flow nicer.
 //TODO: Make plausibility to check/add dependencies
 
 const _ = require('lodash');
