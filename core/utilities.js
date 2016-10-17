@@ -11,7 +11,8 @@ class Utilities {
   mixin() {
     _.mixin({
       'pathExists': this.pathExists,
-      'isHidden': this.isHidden
+      'isHidden': this.isHidden,
+      'decode': this.decode
     });
   }
 
@@ -34,6 +35,14 @@ class Utilities {
       if(path[i][0] === '.') return true;
     }
     return false;
+  }
+
+  decode(path) {
+    try {
+      return decodeURIComponent(path);
+    } catch (err) {
+      return -1;
+    }
   }
 }
 
