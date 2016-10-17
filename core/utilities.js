@@ -1,3 +1,5 @@
+'use strict';
+
 //TODO: should this stand in a seperate file?
 
 const fs = require('fs');
