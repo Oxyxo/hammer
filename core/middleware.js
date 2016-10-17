@@ -14,17 +14,26 @@ class Middleware {
     this._events[name].push(fn);
   }
 
-  call(name, args = [], cb = ()=>{}) {
-    let i = -1;
-    if(!this._events[name]) {
-      return cb([]);
+  call(name, args = []) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
+    if(!Array.isArray(args)) {
+      args = [args];
     }
 
-    async.whilst(()=> {
-      i++; return i < this._events[name].length;
-    }, (done)=> {
-      this._events[name][i].apply(null, [done].concat(args));
-    }, cb);
+    let i = -1;
+    if(!this._events[name]) {
+      deferred.resolve();
+    } else {
+      async.whilst(()=> {
+        i++; return i < this._events[name].length;
+      }, (done)=> {
+        this._events[name][i].apply(null, [done].concat(args));
+      }, deferred.resolve);
+    }
+
+    return promise;
   }
 }
 
