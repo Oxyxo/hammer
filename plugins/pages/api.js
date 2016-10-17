@@ -1,3 +1,5 @@
+'use strict';
+
 const http = require('@hammer/http');
 const db = require('@hammer/database');
 const config = require('@hammer/config');
