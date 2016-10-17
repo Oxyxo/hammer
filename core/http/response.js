@@ -1,9 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-
 /**
  * This class handles all outgoing request
  * the response class also gives a developer
@@ -18,8 +14,8 @@ class Response {
   /**
    * responseHandle is handling all outgoing request
    * to check if all the nessesary values are set.
-   * responseHandle makes it easier to send for example
-   * json back to the client without setting the response
+   * responseHandle makes it easier to send data
+   * back to the client without setting the response
    * type's.
    *
    * @method   Response@responseHandle
@@ -31,19 +27,11 @@ class Response {
 
       yield *next;
 
-      let body = this.body;
-      if(_.isObject(body)) {
-        this.response.type = 'json';
-        return;
-      }
+      //TODO: set body types for json etc?
 
       var delta = Math.ceil(Date.now() - startTime);
       this.set('X-Response-Time', `${delta} ms`);
     };
-  }
-
-  send(ctx, path, options) {
-
   }
 }
 

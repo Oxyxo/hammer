@@ -4,14 +4,14 @@
 const Koa = require('koa');
 const net = require('net');
 const _ = require('lodash');
-const log = require('../log');
 const path = require('path');
+const log = require('../log');
+const send = require('koa-send');
 const config = require('../config');
 const router = require('koa-router');
 const modules = require('../modules');
 const Response = require('./response');
 const middleware = require('../middleware');
-const send = require('koa-send');
 
 /**
  * This class handles the http server and
@@ -47,9 +47,11 @@ class HTTP extends Response {
   }
 
   customNotFound() {
-    this.fallback.get('*', function *() {
+    this.fallback.get('*', function *(next) {
+      yield *next;
+
       this.status = 404;
-      yield send(this, 'templates/404.html', {root:__dirname});
+      yield send(this, 'templates/404.html', {root: __dirname});
     });
   }
 
