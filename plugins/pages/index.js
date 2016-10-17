@@ -2,25 +2,29 @@
 
 const http = require('@hammer/http');
 const db = require('@hammer/database');
-const config = require('@hammer/config');
 const render = require('@hammer/render');
 const themes = require('@hammer/themes');
+
+const co = require('co');
+const Api = require('./api');
 
 /**
  * This class handles Everything
  * that has something to do with Pages
  *
+ * @extends Api
  * @class Pages
  */
-module.exports = class Pages {
+module.exports = class Pages extends Api {
   /**
-   * This constructor function expands
-   * the default config and creates the db table
-   * pages.
+   * This constructor function created the
+   * nessesary db tables.
    *
    * @constructs Pages
    */
   constructor() {
+    super();
+
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
@@ -44,41 +48,72 @@ module.exports = class Pages {
 
   /**
    * This handle is handling all incomming
-   * GET requests. the function checks if the
-   * page/url is found in the database and returns
-   * a renderd page.
+   * GET requests. And returns the requested
+   * page if found.
    *
    * @method   Pages@handle
    */
   handle() {
+    let self = this;
     let Pages = db.model('pages');
+
     let route = http.new.route.get('*', function *(next) {
-      let page = yield Pages.where('url', this.url).fetch();
+      let page = yield self.renderPage(this.url);
+
       if(!page) {
         return yield *next;
       }
 
-      page = page.toJSON();
+      this.status = 200;
+      this.body = page;
+    });
+
+    this._routes.push(route);
+  }
+
+  renderPage(id) {
+    let self = this;
+    let Pages = db.model('pages');
+
+    return co(function *() {
+      let page = yield self.getPage(id);
+      if(!page) {
+        return;
+      }
+
       if(page.data) {
-        //We have to parse the stored JSON in the DB
         let parsed = JSON.parse(page.data);
         page.data = render.pageData(parsed);
       }
 
       var template = yield themes.getTemplate(page.template).catch(()=> {});
       if(!template) {
-        //TODO: send message back when no template found
-        this.status = 500;
         return;
       }
 
       let source = render.serve(template);
-      this.status = 200;
-      this.body = yield source(page.data);
-      return;
+      return yield source(page.data);
     });
+  }
 
-    this._routes.push(route);
+  getPage(page) {
+    let Pages = db.model('pages');
+    return co(function *() {
+      let data = yield Pages.query({
+        where: {
+          "url": page
+        },
+        orWhere: {
+          "id": page
+        }
+      }).fetch();
+
+      if(!data) {
+        return false;
+      }
+
+      return data.toJSON();
+    });
   }
 
   deactivate() {
