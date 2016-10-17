@@ -96,6 +96,15 @@ class HTTP extends Response {
     return new Proxy({}, {
       get: (func, method)=> {
         return (url, fn)=> {
+          if(Array.isArray(url)) {
+            for(let i=0;i<url.length;i++) {
+              let c = url[i];
+              if(Array.isArray(c)) {
+                url[i] = _.joinUrl(c);
+              }
+            }
+          }
+
           this.router[method](url, fn);
 
           return new Proxy({
