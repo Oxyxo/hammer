@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const send = require('koa-send');
 
 /**
@@ -16,9 +17,6 @@ class Response {
   /**
    * responseHandle is handling all outgoing request
    * to check if all the nessesary values are set.
-   * responseHandle makes it easier to send data
-   * back to the client without setting the response
-   * type's.
    *
    * @method   Response@responseHandle
    * @return {Generator} The returned generator can be used by koa
@@ -28,8 +26,6 @@ class Response {
       var startTime = Date.now();
 
       yield *next;
-
-      //TODO: set body types for json etc?
 
       var delta = Math.ceil(Date.now() - startTime);
       this.set('X-Response-Time', `${delta} ms`);
