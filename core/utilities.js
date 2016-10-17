@@ -10,7 +10,8 @@ class Utilities {
 
   mixin() {
     _.mixin({
-      'pathExists': this.pathExists
+      'pathExists': this.pathExists,
+      'isHidden': this.isHidden
     });
   }
 
@@ -25,6 +26,14 @@ class Utilities {
     }
 
     return true;
+  }
+
+  isHidden(root, path) {
+    path = path.substr(root.length).split(sep);
+    for(var i = 0; i < path.length; i++) {
+      if(path[i][0] === '.') return true;
+    }
+    return false;
   }
 }
 
