@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const _ = require('lodash');
+const path = require('path');
 
 /**
  * This class handles all outgoing request
@@ -39,6 +40,10 @@ class Response {
       var delta = Math.ceil(Date.now() - startTime);
       this.set('X-Response-Time', `${delta} ms`);
     };
+  }
+
+  send(ctx, path, options) {
+
   }
 }
 
