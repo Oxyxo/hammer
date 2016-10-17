@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const _ = require('lodash');
+const mime = require('mime');
 
 class Utilities {
   constructor() {
@@ -12,7 +13,8 @@ class Utilities {
     _.mixin({
       'pathExists': this.pathExists,
       'isHidden': this.isHidden,
-      'decode': this.decode
+      'decode': this.decode,
+      'fileType': this.fileType
     });
   }
 
@@ -30,7 +32,7 @@ class Utilities {
   }
 
   isHidden(root, path) {
-    path = path.substr(root.length).split(sep);
+    path = path.substr(root.length).split(path.sep);
     for(var i = 0; i < path.length; i++) {
       if(path[i][0] === '.') return true;
     }
@@ -43,6 +45,10 @@ class Utilities {
     } catch (err) {
       return -1;
     }
+  }
+
+  fileType(file) {
+    return mime.lookup(file);
   }
 }
 
