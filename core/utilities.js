@@ -15,7 +15,8 @@ class Utilities {
       'isHidden': this.isHidden,
       'decode': this.decode,
       'fileType': this.fileType,
-      'joinUrl': this.joinUrl
+      'joinUrl': this.joinUrl,
+      'normalizeUrl': this.normalizeUrl
     });
   }
 
@@ -72,14 +73,14 @@ class Utilities {
     var input = arguments;
     var options = {};
 
-    if (typeof arguments[0] === 'object') {
+    if(typeof arguments[0] === 'object') {
       // new syntax with array and options
       input = arguments[0];
       options = arguments[1] || {};
     }
 
     var joined = [].slice.call(input, 0).join('/');
-    return normalize(joined, options);
+    return _.normalizeUrl(joined, options);
   }
 }
 
