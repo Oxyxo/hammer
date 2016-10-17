@@ -6,7 +6,6 @@ const net = require('net');
 const _ = require('lodash');
 const path = require('path');
 const log = require('../log');
-const send = require('koa-send');
 const config = require('../config');
 const router = require('koa-router');
 const modules = require('../modules');
@@ -47,11 +46,12 @@ class HTTP extends Response {
   }
 
   customNotFound() {
+    let self = this;
     this.fallback.get('*', function *(next) {
       yield *next;
 
       this.status = 404;
-      yield send(this, 'templates/404.html', {root: __dirname});
+      yield self.send(this, 'templates/404.html', {root: __dirname});
     });
   }
 
