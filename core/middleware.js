@@ -15,6 +15,7 @@ class Middleware {
   }
 
   call(name, args = []) {
+    //TODO: add a function that the given args are returned with the latest changes made by middleware
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
