@@ -4,7 +4,7 @@ const render = require('@hammer/render');
 const themes = require('@hammer/themes');
 const intercom = require('@hammer/intercom');
 
-class Helpers {
+module.exports = class Helpers {
   constructor(Hammer) {
     intercom.on('plugins running', this.register());
   }
@@ -35,6 +35,4 @@ class Helpers {
       return promise.resolve();
     });
   }
-}
-
-module.exports = Helpers;
+};
