@@ -1,6 +1,6 @@
 'use strict';
 
-//TODO: Make plausibility to add dependencies
+//TODO: Make plausibility to check/add dependencies
 
 const _ = require('lodash');
 const log = require('./log');
