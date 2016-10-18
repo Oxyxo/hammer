@@ -42,7 +42,16 @@ class HTTP extends Response {
     this.server.use(this.fallback.routes());
 
     this.customNotFound();
+    this.beforeRequestMiddleware();
+
     this.router.use(this.responseHandle());
+  }
+
+  beforeRequestMiddleware() {
+    this.router.use(function *(next) {
+      yield middleware.call('on request', this);
+      yield *next;
+    });
   }
 
   customNotFound() {
