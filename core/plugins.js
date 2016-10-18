@@ -45,6 +45,12 @@ class Plugins {
       deferred.resolve();
       log('plugins.running');
       intercom.emit('plugins running', this._plugins);
+
+      _.each(this._plugins, (column, key)=> {
+        if(column.running) {
+          column.running();
+        }
+      });
     }).catch(()=> {
       deferred.reject();
     });
