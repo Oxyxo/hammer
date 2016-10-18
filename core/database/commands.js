@@ -41,7 +41,7 @@ class Commands {
   addColumns(tableName, schema, db = database) {
     (db.knex || db).schema.table(tableName, (table)=> {
       _.each(schema, (column, key)=> {
-        return this.addTableColumn(table, tableName, column);
+        return this.addTableColumn(table, key, column);
       });
     }).then();
   }
