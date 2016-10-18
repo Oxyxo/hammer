@@ -1,6 +1,5 @@
 'use strict';
 
-//TODO: Check if we can clean this code up and make it the code flow nicer.
 //TODO: Make plausibility to check/add dependencies
 
 const _ = require('lodash');
@@ -169,8 +168,6 @@ class Plugins {
       if(!semver.satisfies(pk.version, pluginConfig.hammer)) {
         log('plugin.not.compatible.with.current.hammer.version', {"name": pluginConfig.name, "version": pluginConfig.version});
       }
-
-      //TODO: set timeout to check if callback is set
 
       let _plugin = new plugin();
 
