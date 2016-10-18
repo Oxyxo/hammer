@@ -38,10 +38,12 @@ class Commands {
     }
   }
 
-  addColumn(tableName, column, db = database) {
+  addColumns(tableName, schema, db = database) {
     (db.knex || db).schema.table(tableName, (table)=> {
-      this.addTableColumn(tableName, table, column);
-    });
+      _.each(schema, (column, key)=> {
+        return this.addTableColumn(table, tableName, column);
+      });
+    }).then();
   }
 
   createTable(name, schema, db = database) {
