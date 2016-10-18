@@ -16,7 +16,6 @@ class Middleware {
   }
 
   call(name, args = [], opts = {}) {
-    //TODO: add a function that the given args are returned with the latest changes made by middleware
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
@@ -36,13 +35,18 @@ class Middleware {
         this._events[name][i].apply(null, [done].concat(args));
       }, (...data)=> {
         let res;
+
         if(updateData && _.isFunction(updateData)) {
           res = args;
+
           for(let i=0;i<data.length;i++) {
             let c = data[i];
+
             if(c) {
               let newData = updateData(res, c);
+
               if(newData) {
+
                 if(!Array.isArray(newData)) {
                   newData = [newData];
                 }
@@ -51,6 +55,7 @@ class Middleware {
               }
             }
           }
+
         } else {
           res = data;
         }

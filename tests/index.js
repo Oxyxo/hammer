@@ -21,7 +21,8 @@ describe('startup Hammer', function() {
         "connection": {
           "filename": path.join(config.get.tmpDir, config.get.databaseFile)
         }
-      }
+      },
+      "port": 9090
     }).then(()=> {
       done();
     });
@@ -30,26 +31,26 @@ describe('startup Hammer', function() {
 
 describe('middleware', function() {
   it('should call middleware', (done)=> {
-    const Modules = global.Hammer.modules;
+    const middleware = require('@hammer/middleware');
 
-    Modules.middleware.on('event', (cb)=> {
+    middleware.on('event', (cb)=> {
       cb();
     });
 
-    Modules.middleware.call('event', [], ()=> {
+    middleware.call('event', []).then(()=> {
       done();
     });
   });
 
   it('should collect data over middleware', (done)=> {
-    const Modules = global.Hammer.modules;
+    const middleware = require('@hammer/middleware');
 
-    Modules.middleware.on('data_event', (cb, name)=> {
+    middleware.on('data_event', (cb, name)=> {
       cb(`hello ${name}`);
     });
 
-    Modules.middleware.call('data_event', ['world'], (data)=> {
-      data.should.equal('hello world');
+    middleware.call('data_event', ['world']).then((data)=> {
+      data[0].should.equal('hello world');
       done();
     });
   });
