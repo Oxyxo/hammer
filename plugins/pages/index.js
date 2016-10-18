@@ -4,6 +4,7 @@ const http = require('@hammer/http');
 const db = require('@hammer/database');
 const render = require('@hammer/render');
 const themes = require('@hammer/themes');
+const middleware = require('@hammer/middleware');
 
 const co = require('co');
 const Api = require('./api');
@@ -58,7 +59,7 @@ module.exports = class Pages extends Api {
     let Pages = db.model('pages');
 
     let route = http.new.route.get('*', function *(next) {
-      let page = yield self.renderPage(this.url);
+      let page = yield self.renderPage(this.url, this);
 
       if(!page) {
         return yield *next;
@@ -71,12 +72,12 @@ module.exports = class Pages extends Api {
     this._routes.push(route);
   }
 
-  renderPage(id) {
+  renderPage(id, ctx) {
     let self = this;
     let Pages = db.model('pages');
 
     return co(function *() {
-      let page = yield self.getPage(id);
+      let page = yield self.getPage(id, ctx);
       if(!page) {
         return;
       }
@@ -96,18 +97,23 @@ module.exports = class Pages extends Api {
     });
   }
 
-  getPage(page) {
+  getPage(page, ctx) {
     let Pages = db.model('pages');
     return co(function *() {
-      let data = yield Pages.query({
+      let [query] = yield middleware.call('page query', [{
         where: {
           "url": page
         },
         orWhere: {
           "id": page
         }
-      }).fetch();
+      }, ctx], {
+        updateData: (orgi, data)=> {
+          return Object.assign(orgi[0], data[0]);
+        }
+      });
 
+      let data = yield Pages.query(query).fetch();
       if(!data) {
         return false;
       }

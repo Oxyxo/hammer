@@ -21,7 +21,7 @@ class Api {
     let self = this;
     return function *() {
       let {id} = this.params;
-      let {data} = yield self.getPage(id);
+      let {data} = yield self.getPage(id, this);
       this.body = data;
     };
   }
