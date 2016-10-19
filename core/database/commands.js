@@ -39,9 +39,14 @@ class Commands {
   }
 
   addColumns(tableName, schema, db = database) {
+    //TODO: return a promise
     (db.knex || db).schema.table(tableName, (table)=> {
       _.each(schema, (column, key)=> {
-        return this.addTableColumn(table, key, column);
+        (db.knex || db).schema.hasColumn(tableName, key).then((exists) => {
+          if(!exists) {
+            return this.addTableColumn(table, key, column);
+          }
+        });
       });
     }).then();
   }
