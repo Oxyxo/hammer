@@ -4,17 +4,19 @@ const http = require('@hammer/http');
 const db = require('@hammer/database');
 const config = require('@hammer/config');
 
+const _ = require('lodash');
+
 class Api {
   constructor() {
     config.expandDefault({
       "pages": {
-        "urlBase": "/hammer/pages"
+        "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
       }
     });
 
-    let urlBase = config.get.pages.urlBase;
-    http.new.route.get([[urlBase, '/json/:id']], this.getJSONPage());
-    http.new.route.get([[urlBase, '/:id']], this.getRenderedPage());
+    let baseUrl = config.get.pages.baseUrl;
+    http.new.route.get([[baseUrl, '/json/:id']], this.getJSONPage());
+    http.new.route.get([[baseUrl, '/:id']], this.getRenderedPage());
   }
 
   getJSONPage() {
