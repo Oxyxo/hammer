@@ -29,8 +29,6 @@ module.exports = class Pages extends Api {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    this._routes = [];
-
     Promise.all([
       db.newTable('pages', {
         "id": {"type": "increments", "nullable": false, "primary": true},
@@ -47,6 +45,16 @@ module.exports = class Pages extends Api {
     return promise;
   }
 
+  get routes() {
+    return [
+      {
+        "method": "get",
+        "url": "*",
+        "fn": this.handle()
+      }
+    ];
+  }
+
   /**
    * This handle is handling all incomming
    * GET requests. And returns the requested
@@ -58,7 +66,7 @@ module.exports = class Pages extends Api {
     let self = this;
     let Pages = db.model('pages');
 
-    let route = http.new.route.get('*', function *(next) {
+    return function *(next) {
       let page = yield self.renderPage(this.url, this);
 
       if(!page) {
@@ -67,9 +75,7 @@ module.exports = class Pages extends Api {
 
       this.status = 200;
       this.body = page;
-    });
-
-    this._routes.push(route);
+    };
   }
 
   renderPage(id, ctx) {
@@ -120,12 +126,5 @@ module.exports = class Pages extends Api {
 
       return data.toJSON();
     });
-  }
-
-  deactivate() {
-    for(let i=0;i<this._routes.length;i++) {
-      let route = this._routes[i];
-      route.destroy();
-    }
   }
 };
