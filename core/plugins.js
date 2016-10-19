@@ -197,11 +197,6 @@ class Plugins {
   get get() {
     return this._plugins;
   }
-
-  newRoute(method, url, cb) {
-    url = urljoin(config.get.plugins.routeBase, url);
-    http.new(method, url, cb);
-  }
 }
 
 module.exports = new Plugins();
