@@ -171,8 +171,10 @@ class Plugins {
 
       let _plugin = new plugin();
 
-      promise.then(()=> {
+      promise.then((...args)=> {
         this._plugins[pluginConfig.name] = _plugin;
+        this.initRoutes(_plugin);
+
         log('plugin.running', {"name": pluginConfig.name});
       });
 
@@ -182,6 +184,7 @@ class Plugins {
       }
 
       _plugin.then((plugin)=> {
+        _plugin = plugin;
         deferred.resolve();
       }).catch(()=> {
         deferred.reject();
@@ -189,6 +192,40 @@ class Plugins {
     });
 
     return promise;
+  }
+
+  initRoutes(plugin) {
+    if(!plugin.routes) {
+      return;
+    }
+
+    let routes = plugin.routes;
+    if(_.isFunction(routes)) {
+      routes = routes();
+    }
+
+    //TODO: add error logs
+    if(!_.isArray(routes)) {
+      return;
+    }
+
+    for(let i=0;i<routes.length;i++) {
+      let route = routes[i];
+
+      if(!route.fn && !route.cb) {
+        continue;
+      }
+
+      if(!route.method) {
+        continue;
+      }
+
+      if(!route.url) {
+        continue;
+      }
+
+      http.route[route.method](_.joinUrl(config.get.plugin.urlBase, route.url), (route.fn || route.cb));
+    }
   }
 
   get get() {
