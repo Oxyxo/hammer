@@ -175,20 +175,20 @@ class Plugins {
         log('plugin.running', {"name": pluginConfig.name});
       });
 
-      //TODO: check if it is reliable to check if var is promise by checking if .then is set and function
       //TODO: i don't like how a plugin core is set via the resolve callback
-      if(_.isFunction(_plugin.then)) {
-        _plugin.then((plugin)=> {
-          this._plugins[pluginConfig.name] = plugin;
-          deferred.resolve();
-        }).catch(()=> {
-          deferred.reject();
-        });
-      } else {
+
+      if(!_.isFunction(_plugin.then)) {
+        this._plugins[pluginConfig.name] = _plugin;
         deferred.resolve();
+        return;
       }
 
-      this._plugins[pluginConfig.name] = _plugin;
+      _plugin.then((plugin)=> {
+        this._plugins[pluginConfig.name] = plugin;
+        deferred.resolve();
+      }).catch(()=> {
+        deferred.reject();
+      });
     });
 
     return promise;
