@@ -172,19 +172,16 @@ class Plugins {
       let _plugin = new plugin();
 
       promise.then(()=> {
+        this._plugins[pluginConfig.name] = _plugin;
         log('plugin.running', {"name": pluginConfig.name});
       });
 
-      //TODO: i don't like how a plugin core is set via the resolve callback
-
       if(!_.isFunction(_plugin.then)) {
-        this._plugins[pluginConfig.name] = _plugin;
         deferred.resolve();
         return;
       }
 
       _plugin.then((plugin)=> {
-        this._plugins[pluginConfig.name] = plugin;
         deferred.resolve();
       }).catch(()=> {
         deferred.reject();
