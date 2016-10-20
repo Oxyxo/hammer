@@ -49,7 +49,6 @@ module.exports = class Pages extends Api {
       deferred.resolve(this);
     });
 
-    this.handle();
     return promise;
   }
 
