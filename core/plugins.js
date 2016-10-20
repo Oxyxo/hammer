@@ -224,7 +224,16 @@ class Plugins {
         continue;
       }
 
-      http.route[route.method](_.joinUrl(config.get.plugins.baseUrl, route.url), (route.fn || route.cb));
+      let url = _.joinUrl(config.get.plugins.baseUrl, route.url);
+      if(route.baseUrl) {
+        url = _.joinUrl(route.baseUrl, route.url);
+      }
+
+      if(route.noBaseUrl) {
+        url = route.url;
+      }
+
+      http.route[route.method](url, (route.fn || route.cb));
     }
   }
 
