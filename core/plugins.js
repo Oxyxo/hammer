@@ -224,7 +224,7 @@ class Plugins {
         continue;
       }
 
-      http.route[route.method](_.joinUrl(config.get.plugin.urlBase, route.url), (route.fn || route.cb));
+      http.route[route.method](_.joinUrl(config.get.plugins.baseUrl, route.url), (route.fn || route.cb));
     }
   }
 
