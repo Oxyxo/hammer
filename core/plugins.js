@@ -234,6 +234,7 @@ class Plugins {
       }
 
       http.route[route.method](url, (route.fn || route.cb));
+      //TODO: add routes to a collection that they can be deleted when a plugin get's deactivated
     }
   }
 
