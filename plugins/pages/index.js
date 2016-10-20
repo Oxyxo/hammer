@@ -4,9 +4,11 @@ const http = require('@hammer/http');
 const db = require('@hammer/database');
 const render = require('@hammer/render');
 const themes = require('@hammer/themes');
+const config = require('@hammer/config');
 const middleware = require('@hammer/middleware');
 
 const co = require('co');
+const _ = require('lodash');
 const Api = require('./api');
 
 /**
@@ -29,6 +31,12 @@ module.exports = class Pages extends Api {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
+    config.expandDefault({
+      "pages": {
+        "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
+      }
+    });
+
     Promise.all([
       db.newTable('pages', {
         "id": {"type": "increments", "nullable": false, "primary": true},
@@ -50,7 +58,18 @@ module.exports = class Pages extends Api {
       {
         "method": "get",
         "url": "*",
-        "fn": this.handle()
+        "fn": this.handle(),
+        "noBaseUrl": true
+      },
+      {
+        "method": "get",
+        "url": [config.get.pages.baseUrl, "/json/:id"],
+        "fn": this.getJSONPage()
+      },
+      {
+        "method": "get",
+        "url": [config.get.pages.baseUrl, "/:id"],
+        "fn": this.getRenderedPage()
       }
     ];
   }
@@ -114,7 +133,7 @@ module.exports = class Pages extends Api {
           "id": page
         }
       }, ctx], {
-        updateData: (orgi, data)=> {
+        dataUpdate: (orgi, data)=> {
           return Object.assign(orgi[0], data[0]);
         }
       });
