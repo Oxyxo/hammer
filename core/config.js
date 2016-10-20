@@ -19,7 +19,7 @@ class Config {
         "corePlugins": path.join(__dirname, '../plugins'),
         "pluginFolders": [path.join(process.cwd(), 'plugins')],
         "configJSON": "config.json",
-        "urlBase": "/hammer/"
+        "baseUrl": "/hammer/"
       },
       "logging": true,
       "requirePrefix": { //TODO: improve the regex? (i am not a regex jedi)
