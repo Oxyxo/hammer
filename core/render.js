@@ -30,6 +30,10 @@ class Render {
     };
   }
 
+  expandRenderData() {
+    return this.setDefaultRenderData.apply(this, arguments);
+  }
+
   setDefaultRenderData(data) {
     this._data.push(data);
   }
