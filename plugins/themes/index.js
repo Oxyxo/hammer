@@ -88,7 +88,8 @@ class Themes {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    db.table('themes').where('active', 1).then((theme)=> {
+    let Themes = db.table('themes');
+    Themes.where('active', 1).then((theme)=> {
       if(!theme) {
         return deferred.reject();
       }
