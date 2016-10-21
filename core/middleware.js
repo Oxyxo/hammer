@@ -20,7 +20,7 @@ class Middleware {
         promise = deferred.promise;
 
     if(!this._events[name]) {
-      deferred.resolve();
+      deferred.resolve(true);
       return promise;
     }
 
