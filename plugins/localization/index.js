@@ -2,6 +2,7 @@
 
 const db = require('@hammer/database');
 const config = require('@hammer/config');
+const render = require('@hammer/render');
 const middleware = require('@hammer/middleware');
 
 const _ = require('lodash');
@@ -24,6 +25,22 @@ module.exports = class Loc {
 
     middleware.on('on request', this.onRequest);
     middleware.on('page query', this.pageQuery);
+  }
+
+  get helpers() {
+    return [
+      {
+        "name": "loc",
+        "alias": ["lang", "localization"],
+        "fn": this.helper
+      }
+    ];
+  }
+
+  helper() {
+    return function *() {
+
+    };
   }
 
   onRequest(done, ctx) {
