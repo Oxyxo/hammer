@@ -1,5 +1,6 @@
 'use strict';
 
+const co = require('co');
 const _ = require('lodash');
 const marked = require('marked');
 const bluebird = require('bluebird');
@@ -14,6 +15,7 @@ const hbs = promiseHbs(require('handlebars'), {Promise, bluebird});
  */
 class Render {
   constructor() {
+    this.hbs = hbs;
     this._data = [];
     marked.setOptions({
       breaks: true
@@ -88,14 +90,8 @@ class Render {
 
   helper(name, fn) {
     hbs.registerHelper(name, function() {
-      let deferred = Promise.defer(),
-          promise = deferred.promise;
-
-      let args = Object.keys(arguments).map(x => arguments[x]);
-      args.unshift(deferred);
-
-      fn.apply(this, args);
-      return promise;
+      //TODO: shall we throw a error when given function is not a generator function
+      return co(fn.apply(this, arguments)());
     });
   }
 }
