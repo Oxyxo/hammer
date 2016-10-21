@@ -29,11 +29,6 @@ class Config {
     };
 
     this._inputConfig = {};
-
-    render.setDefaultRenderData(()=> {
-      //TODO: should we remove sensitive data?
-      return {"config": this.get};
-    });
   }
 
   set set(json) {
