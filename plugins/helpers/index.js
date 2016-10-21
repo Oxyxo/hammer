@@ -5,8 +5,21 @@ const themes = require('@hammer/themes');
 const intercom = require('@hammer/intercom');
 
 module.exports = class Helpers {
-  initialize() {
-    render.helper('include', this.include);
+  get helpers() {
+    return [
+      {
+        "name": "include",
+        "fn": this.include
+      },
+      {
+        "name": "header",
+        "fn": this.header
+      },
+      {
+        "name": "footer",
+        "fn": this.footer
+      }
+    ];
   }
 
   include(promise, ...args) {
@@ -28,5 +41,13 @@ module.exports = class Helpers {
       //TODO: log error Front end or backend?
       return promise.resolve();
     });
+  }
+
+  header(promise) {
+    promise.resolve();
+  }
+
+  footer(promise) {
+    promise.resolve();
   }
 };
