@@ -56,7 +56,6 @@ module.exports = class Loc {
 
   pageQuery(done, query, ctx) {
     let {loc} = ctx.localization;
-    console.log(loc);
     if(!loc) {
       return done();
     }
