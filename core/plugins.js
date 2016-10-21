@@ -266,7 +266,12 @@ class Plugins {
         continue;
       }
 
-      render.helper(helper.name, (helper.fn || helper.cb));
+      let name = [helper.name];
+      if(helper.alias) {
+        name.push(...helper.alias);
+      }
+
+      render.helper(name, (helper.fn || helper.cb));
     }
   }
 

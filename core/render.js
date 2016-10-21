@@ -88,11 +88,21 @@ class Render {
     return new hbs.SafeString(string);
   }
 
-  helper(name, fn) {
-    hbs.registerHelper(name, function() {
+  helperHandle(fn) {
+    return (...args)=> {
       //TODO: shall we throw a error when given function is not a generator function
-      return co(fn.apply(this, arguments)());
-    });
+      return co(fn.apply(this, args)());
+    };
+  }
+
+  helper(name, fn) {
+    if(_.isArray(name)) {
+      for(let i=0;i<name.length;i++) {
+        hbs.registerHelper(name[i], this.helperHandle(fn));
+      }
+    }
+
+    hbs.registerHelper(name, this.helperHandle(fn));
   }
 }
 
