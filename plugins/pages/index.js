@@ -116,9 +116,11 @@ module.exports = class Pages extends Api {
         return;
       }
 
+      let data = {ctx};
+
       this.type = 'text/html';
       let source = render.serve(template);
-      return yield source(page.data);
+      return yield source(Object.assign(data, page.data));
     });
   }
 
