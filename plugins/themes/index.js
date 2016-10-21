@@ -62,9 +62,13 @@ class Themes {
         let folder = folders[i],
             configPath = path.join(base, folder, config.get.themes.configFile);
 
+        if(_.isHiddenPath(configPath)) {
+          continue;
+        }
+
         if(!_.pathExists(configPath)) {
           //TODO: log error when no config found.
-          console.log('no config');return;
+          continue;
         }
 
         let themeConfig = fs.readJSONSync(configPath);
