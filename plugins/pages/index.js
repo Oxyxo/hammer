@@ -111,11 +111,12 @@ module.exports = class Pages extends Api {
         page.data = render.pageData(parsed);
       }
 
-      var template = yield themes.getTemplate(page.template).catch(()=> {});
+      let template = yield themes.getTemplate(page.template).catch(()=> {});
       if(!template) {
         return;
       }
 
+      this.type = 'text/html';
       let source = render.serve(template);
       return yield source(page.data);
     });
