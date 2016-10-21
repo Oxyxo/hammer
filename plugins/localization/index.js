@@ -13,7 +13,8 @@ module.exports = class Loc {
         "sub": /^\w{2}(?=\.)/,
         "domain": /\.[^.]{2,3}(?:\.[^.]{2,3})?$/,
         "port": /(\d{2,4})$/,
-        "url": /^(?:\/)(\w{2})(?:\/)/
+        "url": /^(?:\/)(\w{2})(?:\/)/,
+        "defaultLanguage": "en"
       }
     });
 
@@ -55,11 +56,7 @@ module.exports = class Loc {
   }
 
   pageQuery(done, query, ctx) {
-    let {loc} = ctx.localization;
-    if(!loc) {
-      return done();
-    }
-
+    let loc = ctx.localization.loc ? ctx.localization.loc : config.get.localization.defaultLanguage;
     query.lng = loc;
     done(null, query);
   }
