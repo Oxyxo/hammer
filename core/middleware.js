@@ -59,47 +59,6 @@ class Middleware {
     });
 
     return promise;
-
-    // let i = -1;
-    // if(!this._events[name]) {
-    //   deferred.resolve();
-    // } else {
-    //   async.whilst(()=> {
-    //     i++; return i < this._events[name].length;
-    //   }, (done)=> {
-    //     this._events[name][i].apply(null, [done].concat(args));
-    //   }, (...data)=> {
-    //     let res;
-    //
-    //     if(updateData && _.isFunction(updateData)) {
-    //       res = args;
-    //
-    //       for(let i=0;i<data.length;i++) {
-    //         let c = data[i];
-    //
-    //         if(c) {
-    //           let newData = updateData(res, c);
-    //
-    //           if(newData) {
-    //
-    //             if(!_.isArray(newData)) {
-    //               newData = [newData];
-    //             }
-    //
-    //             res = newData;
-    //           }
-    //         }
-    //       }
-    //
-    //     } else {
-    //       res = data;
-    //     }
-    //
-    //     deferred.resolve(res);
-    //   });
-    // }
-
-    return promise;
   }
 }
 
