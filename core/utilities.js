@@ -3,20 +3,25 @@
 const fs = require('fs');
 const _ = require('lodash');
 const mime = require('mime');
+const config = require('./config');
 
 class Utilities {
   constructor() {
+    config.expandDefault({
+      "isHiddenPath": /\/\.\w+/
+    });
+
     this.mixin();
   }
 
   mixin() {
     _.mixin({
-      'pathExists': this.pathExists,
-      'isHidden': this.isHidden,
-      'decode': this.decode,
-      'fileType': this.fileType,
-      'joinUrl': this.joinUrl,
-      'normalizeUrl': this.normalizeUrl
+      "pathExists": this.pathExists,
+      "isHiddenPath": this.isHiddenPath,
+      "decode": this.decode,
+      "fileType": this.fileType,
+      "joinUrl": this.joinUrl,
+      "normalizeUrl": this.normalizeUrl
     });
   }
 
@@ -33,12 +38,8 @@ class Utilities {
     return true;
   }
 
-  isHidden(root, path) {
-    path = path.substr(root.length).split(path.sep);
-    for(var i = 0; i < path.length; i++) {
-      if(path[i][0] === '.') return true;
-    }
-    return false;
+  isHiddenPath(path) {
+    return config.get.isHiddenPath.test(path);
   }
 
   decode(path) {
