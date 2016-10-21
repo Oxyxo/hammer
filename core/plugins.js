@@ -46,11 +46,14 @@ class Plugins {
       log('plugins.running');
       intercom.emit('plugins running', this._plugins);
 
-      _.each(this._plugins, (column, key)=> {
-        if(column.initialize) {
-          column.initialize();
+      for(let key in this._plugins) {
+        if(this._plugins.hasOwnProperty(key) && this._plugins[key]) {
+          let plugin = this._plugins[key];
+          if(plugin.initialize) {
+            plugin.initialize();
+          }
         }
-      });
+      }
     }).catch(()=> {
       deferred.reject();
     });
