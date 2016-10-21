@@ -125,19 +125,14 @@ module.exports = class Pages extends Api {
     let Pages = db.model('pages');
     return co(function *() {
       let [query] = yield middleware.call('page query', [{
-        where: {
-          "url": page
-        },
-        orWhere: {
-          "id": page
-        }
+        "url": page
       }, ctx], {
         dataUpdate: (orgi, data)=> {
           return Object.assign(orgi[0], data[0]);
         }
       });
 
-      let data = yield Pages.query(query).fetch();
+      let data = yield Pages.where(query).fetch();
       if(!data) {
         return false;
       }
