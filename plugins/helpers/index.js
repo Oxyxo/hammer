@@ -5,10 +5,8 @@ const themes = require('@hammer/themes');
 const intercom = require('@hammer/intercom');
 
 module.exports = class Helpers {
-  running() {
-    return ()=> {
-      render.helper('include', this.include);
-    };
+  initialize() {
+    render.helper('include', this.include);
   }
 
   include(promise, ...args) {
