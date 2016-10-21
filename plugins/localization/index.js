@@ -64,7 +64,7 @@ module.exports = class Loc {
     }
 
     ctx.localization = {
-      loc: loc,
+      loc: (loc ? loc : config.get.localization.defaultLanguage),
       href: href,
       host: host
     };
