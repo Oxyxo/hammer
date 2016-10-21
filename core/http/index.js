@@ -1,3 +1,5 @@
+//TODO: i want to rewrite the HTTP registering of routes to be more easier.
+
 /* jshint -W124 */
 'use strict';
 
