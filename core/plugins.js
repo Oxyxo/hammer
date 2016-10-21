@@ -9,6 +9,7 @@ const async = require('async');
 const fs = require('fs-extra');
 const http = require('./http');
 const semver = require('semver');
+const render = require('./render');
 const config = require('./config');
 const urljoin = require('url-join');
 const pk = require('../package.json');
@@ -174,6 +175,7 @@ class Plugins {
       promise.then((...args)=> {
         this._plugins[pluginConfig.name] = _plugin;
         this.initRoutes(_plugin);
+        this.initHelpers(_plugin);
 
         log('plugin.running', {"name": pluginConfig.name});
       });
@@ -235,6 +237,36 @@ class Plugins {
 
       http.route[route.method](url, (route.fn || route.cb));
       //TODO: add routes to a collection that they can be deleted when a plugin get's deactivated
+    }
+  }
+
+  initHelpers(plugin) {
+    if(!plugin.helpers) {
+      return;
+    }
+
+    let helpers = plugin.helpers;
+    if(_.isFunction(helpers)) {
+      helpers = helpers();
+    }
+
+    //TODO: add error logs
+    if(!_.isArray(helpers)) {
+      return;
+    }
+
+    for(let i=0;i<helpers.length;i++) {
+      let helper = helpers[i];
+
+      if(!helper.fn && !helper.cb) {
+        continue;
+      }
+
+      if(!helper.name) {
+        continue;
+      }
+
+      render.helper(helper.name, (helper.fn || helper.cb));
     }
   }
 
