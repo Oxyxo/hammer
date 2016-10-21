@@ -4,6 +4,8 @@ const render = require('@hammer/render');
 const themes = require('@hammer/themes');
 const intercom = require('@hammer/intercom');
 
+const _ = require('lodash');
+
 module.exports = class Helpers {
   get helpers() {
     return [
@@ -13,11 +15,11 @@ module.exports = class Helpers {
       },
       {
         "name": "header",
-        "fn": this.header
+        "fn": this.header()
       },
       {
         "name": "footer",
-        "fn": this.footer
+        "fn": this.footer()
       }
     ];
   }
@@ -25,13 +27,17 @@ module.exports = class Helpers {
   include(promise, ...args) {
     let promises = [];
 
-    if(1 >= args.length) {
+    if(1 > args.length) {
       //TODO: optionally log here that include tag does not contain template
       return promise.resolve();
     }
 
-    for(let i=0;i<(args.length-1);i++) {
+    for(let i=0;i<(args.length);i++) {
       let arg = args[i];
+      if(!_.isString(arg)) {
+        continue;
+      }
+      
       promises.push(themes.getTemplate(arg));
     }
 
@@ -43,11 +49,15 @@ module.exports = class Helpers {
     });
   }
 
-  header(promise) {
-    promise.resolve();
+  header() {
+    return (promise)=> {
+      this.include(promise, 'header.html');
+    };
   }
 
-  footer(promise) {
-    promise.resolve();
+  footer() {
+    return (promise)=> {
+      this.include(promise, 'footer.html');
+    };
   }
 };
