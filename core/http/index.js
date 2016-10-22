@@ -38,10 +38,7 @@ class HTTP extends Response {
     this.koa = Koa;
 
     this.router = new router();
-    this.fallback = new router();
-
     this.server.use(this.router.routes());
-    this.server.use(this.fallback.routes());
 
     this.customErrorHandle();
     this.beforeRequestMiddleware();
@@ -58,7 +55,7 @@ class HTTP extends Response {
 
   customErrorHandle() {
     let self = this;
-    this.fallback.get('*', function *(next) {
+    this.router.get('*', function *(next) {
       //TODO: give plausibility to templates to override 500 and 404 message
       try {
         yield *next;
