@@ -14,6 +14,7 @@ const config = require('./config');
 const urljoin = require('url-join');
 const pk = require('../package.json');
 const intercom = require('./intercom');
+const debug = require('debug')('plugins');
 
 class Plugins {
   constructor() {
@@ -180,7 +181,7 @@ class Plugins {
         this.initRoutes(_plugin);
         this.initHelpers(_plugin);
 
-        log('plugin.running', {"name": pluginConfig.name});
+        debug('%s running', pluginConfig.name);
       });
 
       if(!_.isFunction(_plugin.then)) {
