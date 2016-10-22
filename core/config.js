@@ -24,7 +24,7 @@ class Config {
       "logging": true,
       "requirePrefix": { //TODO: improve the regex? (i am not a regex jedi)
         "base": /^@hammer/,
-        "module": /(?!\/)(\w+)$/
+        "module": /(?!\/)\w+/g
       }
     };
 

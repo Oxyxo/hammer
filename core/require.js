@@ -21,17 +21,18 @@ class Require {
 
       if(prefix.base.test(path)) {
         let module = path.match(prefix.module);
+        module.splice(0,1);
+        //NOTE: in future plausibility to add adding nested require require('@hammer/render/serve')
+
         if(module && _.isArray(module)) {
-          module = module[0];
+          let getters = [Hammer.modules, Hammer.plugins.get];
 
           return new Proxy({}, {
             get: function(func, name) {
-              if(Hammer.modules[module]) {
-                return Hammer.modules[module][name];
-              }
-
-              if(Hammer.plugins.get[module]) {
-                return Hammer.plugins.get[module][name];
+              for(let i=0;i<getters.length;i++) {
+                if(getters[i][module[0]] && getters[i][module[0]][name]) {
+                  return getters[i][module[0]][name];
+                }
               }
             }
           });
