@@ -50,9 +50,5 @@
   "plugins.running": {
     "message": ":zap:  All plugins are running",
     "level": "log"
-  },
-  "plugin.running": {
-    "message": "✓ {{name}} running",
-    "level": "debug"
   }
 }
