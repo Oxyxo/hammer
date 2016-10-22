@@ -43,7 +43,7 @@ class HTTP extends Response {
     this.server.use(this.router.routes());
     this.server.use(this.fallback.routes());
 
-    this.customNotFound();
+    this.customErrorHandle();
     this.beforeRequestMiddleware();
 
     this.router.use(this.responseHandle());
@@ -56,10 +56,17 @@ class HTTP extends Response {
     });
   }
 
-  customNotFound() {
+  customErrorHandle() {
     let self = this;
     this.fallback.get('*', function *(next) {
-      yield *next;
+      //TODO: give plausibility to templates to override 500 and 404 message
+      try {
+        yield *next;
+      } catch(err) {
+        this.status = err.status || 500;
+        yield self.send(this, 'templates/500.html', {root: __dirname});
+        return;
+      }
 
       this.status = 404;
       yield self.send(this, 'templates/404.html', {root: __dirname});
