@@ -1,6 +1,8 @@
 'use strict';
 
+const fs = require('fs');
 const _ = require('lodash');
+const path = require('path');
 const send = require('koa-send');
 
 /**
@@ -44,6 +46,34 @@ class Response {
    */
   send(...args) {
     return send.apply(this, args);
+  }
+
+  /**
+   * Static sends static files back that are found
+   * in the given root folder.
+   * @method   Response@static
+   * @param    {String} url The base url
+   * @param    {String} root Root path to the base folder
+   */
+  static(url, root) {
+    url = new RegExp(`^${url}`);
+    this.router.use(function *(next) {
+      if(!url.test(this.url)) {
+        return yield *next;
+      }
+
+      root = root;
+      if(_.isFunction(root)) {
+        root = yield root;
+      }
+
+      let file = this.url.replace(url, '');
+      if(_.pathExists(path.join(root, file), 'isFile')) {
+        return yield send(this, file, {root: root});
+      }
+
+      yield *next;
+    });
   }
 }
 
