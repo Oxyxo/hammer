@@ -4,7 +4,6 @@ const log = require('./log');
 const path = require('path');
 const http = require('./http');
 const config = require('./config');
-const client = require('./client');
 const render = require('./render');
 const plugins = require('./plugins');
 const modules = require('./modules');
@@ -20,6 +19,7 @@ class Hammer {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
+    global.Hammer = this;
     config.set = _config;
 
     new utilities(this);
@@ -28,10 +28,10 @@ class Hammer {
       http.open(),
       authentication.initialize()
     ]).then(()=> {
+      let client = require('./client');
       new client();
-      plugins.initialize();
 
-      global.Hammer = this;
+      plugins.initialize();
       deferred.resolve(this);
 
       log('hammer.running', {"port": config.get.port});
