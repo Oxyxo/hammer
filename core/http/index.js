@@ -17,7 +17,6 @@ const middleware = require('../middleware');
 /**
  * This class handles the http server and
  * all incomming and outgoing requests.
- *
  * @extends Response
  * @class HTTP
  */
@@ -27,7 +26,6 @@ class HTTP extends Response {
    * variables set up to start a http server.
    * Also is the router included that handles all
    * request methods + requests.
-   *
    * @constructs HTTP
    */
   constructor() {
@@ -51,7 +49,6 @@ class HTTP extends Response {
    * over the intercom module. When 'on request'
    * is called is the current session included in the
    * first argument.
-   *
    * @method   HTTP@beforeRequestMiddleware
    */
   beforeRequestMiddleware() {
@@ -66,7 +63,6 @@ class HTTP extends Response {
    * In the future will this function give active
    * themes the plausibilty to create cusom 404 and
    * 500 templates.
-   *
    * @method   HTTP@customErrorHandle
    */
   customErrorHandle() {
@@ -117,7 +113,6 @@ class HTTP extends Response {
   /**
    * When called is the given port checked if
    * in use.
-   *
    * @method   HTTP@portInUse
    * @param    {Number} port [description]
    * @returns  {Promise}
