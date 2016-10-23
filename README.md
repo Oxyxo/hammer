@@ -19,8 +19,7 @@ The next thing that we have to do is create a small project that starts Hammer.
 
 ```
 let Hammer = require('projecthammer');
-
-Hammer();
+new Hammer();
 ```
 
 Yes it is as simple as that. Hammer is now up and running on port 8080. 🎉
