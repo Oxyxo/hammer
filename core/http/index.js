@@ -46,6 +46,14 @@ class HTTP extends Response {
     this.router.use(this.responseHandle());
   }
 
+  /**
+   * This function calls the event 'on request'
+   * over the intercom module. When 'on request'
+   * is called is the current session included in the
+   * first argument.
+   *
+   * @method   HTTP@beforeRequestMiddleware
+   */
   beforeRequestMiddleware() {
     this.router.use(function *(next) {
       yield middleware.call('on request', this);
@@ -53,6 +61,14 @@ class HTTP extends Response {
     });
   }
 
+  /**
+   * This function handles all 404 and 500 errors.
+   * In the future will this function give active
+   * themes the plausibilty to create cusom 404 and
+   * 500 templates.
+   *
+   * @method   HTTP@customErrorHandle
+   */
   customErrorHandle() {
     let self = this;
     this.router.get('*', function *(next) {
@@ -70,12 +86,21 @@ class HTTP extends Response {
     });
   }
 
-  open() {
+  /**
+   * When this function is called starts the
+   * Hammer http server listening on the given port.
+   * If no port is given does it use the port set
+   * in the config. This function does also check if
+   * the given port is already in use (HTTP@portInUse).
+   *
+   * @method   HTTP@open
+   * @param    port {Number} port The port number that the http server should listen to.
+   */
+  open(port = config.get.port) {
     let deferred = Promise.defer(),
-        promise = deferred.promise,
-        port = config.get.port;
+        promise = deferred.promise;
 
-    this.portInUse(port, (inUse)=> {
+    this.portInUse(port).then((inUse)=> {
       if(inUse) {
         return deferred.reject(new Error(log('port.in.use', {"port": port})));
       }
@@ -89,22 +114,35 @@ class HTTP extends Response {
     return promise;
   }
 
-  portInUse(port, cb) {
+  /**
+   * When called is the given port checked if
+   * in use.
+   *
+   * @method   HTTP@portInUse
+   * @param    {Number} port [description]
+   * @returns  {Promise}
+   */
+  portInUse(port) {
+    let deferred = Promise.defer(),
+        promise = deferred.promise;
+
     let net = require('net');
     let tester = net.createServer();
 
     tester.once('error', (err)=> {
       if(err.code != 'EADDRINUSE') {
-        return cb();
+        return deferred.resolve();
       }
-      return cb(err);
+      return deferred.resolve(err);
     });
 
     tester.once('listening', ()=> {
-      tester.once('close', cb).close();
+      tester.once('close', deferred.resolve).close();
     });
 
     tester.listen(port);
+
+    return promise;
   }
 
   get route() {
