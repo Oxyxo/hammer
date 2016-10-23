@@ -21,22 +21,19 @@ class Seo {
       {
         "name": "meta",
         "alias": ["seo"],
-        "fn": this.metaHelper
+        "fn": this.helper
       }
     ];
   }
 
-  metaHelper(...args) {
-    return function *() {
+  helper({data}) {
+    data = data.root;
+    return function() {
       let meta = fs.readFileSync(path.join(config.get.seo.templates, 'meta.hbs'), 'utf-8');
 
       let template = render.serve(meta);
-      return render.safeString(template());
+      return render.safeString(template(data));
     };
-  }
-
-  getMeta() {
-
   }
 }
 
