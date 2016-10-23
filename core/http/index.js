@@ -73,7 +73,14 @@ class HTTP extends Response {
         yield *next;
       } catch(err) {
         this.status = err.status || 500;
+      }
+
+      if(this.status == 500) {
         yield self.send(this, 'templates/500.html', {root: __dirname});
+        return;
+      }
+
+      if(this.status != 404 || this.body) {
         return;
       }
 
