@@ -23,3 +23,29 @@ new Hammer();
 ```
 
 Yes it is as simple as that. Hammer is now up and running on port 8080. 🎉
+
+## Config
+
+The configuration of Hammer can be overwritten/changed by passing a object as the first argument when constructing Hammer.
+
+```
+new Hammer({
+  port: 5050,
+  database: {
+    client: "mysql",
+    connection: {
+      host : "127.0.0.1",
+      user : "hammer",
+      password : "super_secret_password",
+      database : "super_website"
+    }
+  }
+});
+```
+## Questions
+For any questions and support please use the gitter chat room (commming soon). The issue list of this repo is **exclusively** for bug reports and feature requests.
+
+## License
+[MIT](http://opensource.org/licenses/MIT)
+
+Copyright (c) 2016 Jeroen Rinzema
