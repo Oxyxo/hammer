@@ -1,3 +1,6 @@
+//TODO: update way how logging is done.
+'use strict';
+
 const colors = require('colors');
 const hbs = require('handlebars');
 const schema = require('./schema');
