@@ -22,7 +22,7 @@ class Config {
         "baseUrl": "/hammer/"
       },
       "logging": true,
-      "requirePrefix": { //TODO: improve the regex? (i am not a regex jedi)
+      "requirePrefix": { //NOTE: improve the regex? (i am not a regex jedi)
         "base": /^@hammer/,
         "module": /(?!\/)\w+/g
       }

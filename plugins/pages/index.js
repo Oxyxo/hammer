@@ -14,7 +14,6 @@ const Api = require('./api');
 /**
  * This class handles Everything
  * that has something to do with Pages
- *
  * @extends Api
  * @class Pages
  */
@@ -22,7 +21,6 @@ module.exports = class Pages extends Api {
   /**
    * This constructor function created the
    * nessesary db tables.
-   *
    * @constructs Pages
    */
   constructor() {
@@ -77,7 +75,6 @@ module.exports = class Pages extends Api {
    * This handle is handling all incomming
    * GET requests. And returns the requested
    * page if found.
-   *
    * @method   Pages@handle
    */
   handle() {
