@@ -14,13 +14,13 @@ class Themes {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    config.expandDefault({
+    config.default = {
       "themes": {
         "themesFolder": path.join(process.cwd(), 'themes'),
         "templatesFolder": "templates",
         "configFile": "theme.json"
       }
-    });
+    };
 
     Promise.all([
       db.newTable('themes', {

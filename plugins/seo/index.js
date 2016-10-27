@@ -9,11 +9,11 @@ const path = require('path');
 
 class Seo {
   initialize() {
-    config.expandDefault({
+    config.default = {
       "seo": {
         "templates": path.join(__dirname, 'templates')
       }
-    });
+    };
   }
 
   get helpers() {
