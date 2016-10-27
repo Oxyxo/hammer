@@ -29,11 +29,11 @@ module.exports = class Pages extends Api {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    config.expandDefault({
+    config.default = {
       "pages": {
         "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
       }
-    });
+    };
 
     Promise.all([
       db.newTable('pages', {

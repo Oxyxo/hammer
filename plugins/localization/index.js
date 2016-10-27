@@ -9,7 +9,7 @@ const _ = require('lodash');
 
 module.exports = class Loc {
   initialize() {
-    config.expandDefault({
+    config.default = {
       "localization": {
         "sub": /^\w{2}(?=\.)/,
         "domain": /\.[^.]{2,3}(?:\.[^.]{2,3})?$/,
@@ -17,7 +17,7 @@ module.exports = class Loc {
         "url": /^(?:\/)(\w{2})(?:\/)/,
         "defaultLanguage": "en"
       }
-    });
+    };
 
     db.addColumnsToTable('pages', {
       "lng": {"type": "string", "nullable": false, "defaultTo": "en", "maxlength": 5}

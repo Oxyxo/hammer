@@ -7,9 +7,9 @@ const config = require('./config');
 
 class Utilities {
   constructor() {
-    config.expandDefault({
+    config.default = {
       "isHiddenPath": /\/\.\w+/
-    });
+    };
 
     this.mixin();
   }

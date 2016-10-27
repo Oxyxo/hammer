@@ -27,11 +27,19 @@ class Require {
         if(module && _.isArray(module)) {
           let getters = [Hammer.modules, Hammer.plugins.get];
 
+          //TODO: also add the plausibility for setters
           return new Proxy({}, {
             get: function(func, name) {
               for(let i=0;i<getters.length;i++) {
                 if(getters[i][module[0]] && getters[i][module[0]][name]) {
                   return getters[i][module[0]][name];
+                }
+              }
+            },
+            set: function(target, name, value) {
+              for(let i=0;i<getters.length;i++) {
+                if(getters[i][module[0]] && getters[i][module[0]][name]) {
+                  return getters[i][module[0]][name] = value;
                 }
               }
             }
