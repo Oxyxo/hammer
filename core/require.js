@@ -1,7 +1,5 @@
 'use strict';
 
-//TODO: expand module with plausibilty to add your own packages.
-
 const _ = require('lodash');
 const Module = require('module');
 const config = require('./config');
@@ -27,7 +25,6 @@ class Require {
         if(module && _.isArray(module)) {
           let getters = [Hammer.modules, Hammer.plugins.get];
 
-          //TODO: also add the plausibility for setters
           return new Proxy({}, {
             get: function(func, name) {
               for(let i=0;i<getters.length;i++) {
