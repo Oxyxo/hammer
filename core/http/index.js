@@ -147,6 +147,7 @@ class HTTP extends Response {
     return promise;
   }
 
+  //TODO: Deprecated remove later on
   get route() {
     return new Proxy({}, {
       get: (func, method)=> {
@@ -186,6 +187,7 @@ class HTTP extends Response {
     });
   }
 
+  //TODO: Deprecated remove later on
   get new() {
     return this;
   }

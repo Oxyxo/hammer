@@ -48,6 +48,7 @@ class Response {
     return send.apply(this, args);
   }
 
+  //TODO: add 404 callback when url ends with file extention
   /**
    * Static sends static files back that are found
    * in the given root folder.
