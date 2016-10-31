@@ -1,6 +1,6 @@
 {
   "name": "public",
-  "description": "Create and maintain public folders on the go",
+  "description": "Easily create a public folder in your project",
   "main": "index.js",
   "author": "Jeroen Rinzema",
   "hammer": "0.1.x"
