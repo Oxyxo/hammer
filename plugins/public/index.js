@@ -2,7 +2,6 @@ const http = require('@hammer/http');
 const config = require('@hammer/config');
 const themes = require('@hammer/themes');
 
-const co = require('co');
 const path = require('path');
 
 class Public {
