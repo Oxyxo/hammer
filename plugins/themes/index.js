@@ -53,7 +53,7 @@ class Themes {
             folder = path.join(base, theme.folder);
 
         if(!_.pathExists(folder, 'isDirectory') || folders.indexOf(theme.folder) === -1) {
-          Themes.where('id', theme.id).delete();
+          yield Themes.where('id', theme.id).delete();
           continue;
         }
 
