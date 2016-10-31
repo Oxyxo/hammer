@@ -48,4 +48,4 @@ For any questions and support please use the gitter chat room (coming soon). The
 ## License
 [MIT](http://opensource.org/licenses/MIT)
 
-Copyright (c) 2016 Jeroen Rinzema
+Copyright © 2016 Jeroen Rinzema
