@@ -42,9 +42,6 @@ class Hammer {
       http.open(),
       authentication.initialize()
     ]).then(()=> {
-      let client = require('./client');
-      new client();
-
       plugins.initialize();
       deferred.resolve(this);
 
