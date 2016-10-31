@@ -49,7 +49,9 @@ class Hammer {
       deferred.resolve(this);
 
       log('hammer.running', {"port": config.get.port});
-    }); //TODO: add catch to catch errors!
+    }).catch((err)=> {
+      console.trace(err); //NOTE: shall we use something else then console.trace?
+    });
 
     modules.extend('log', log);
     modules.extend('intercom', intercom);
