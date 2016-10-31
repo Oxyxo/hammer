@@ -4,6 +4,7 @@ const db = require('@hammer/database');
 const config = require('@hammer/config');
 const plugins = require('@hammer/plugins');
 
+const co = require('co');
 const _ = require('lodash');
 const path = require('path');
 const fs = require('fs-extra');
@@ -14,6 +15,7 @@ class Themes {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
+    this.active;
     config.default = {
       "themes": {
         "themesFolder": path.join(process.cwd(), 'themes'),
@@ -30,7 +32,7 @@ class Themes {
         "active": {"type": "boolean", "nullable": false, "defaultTo": false}
       })
     ]).then(()=> {
-      this.collectThemes(config.get.themes.themesFolder).then(()=> {
+      this.collect(config.get.themes.themesFolder).then(()=> {
         deferred.resolve(this);
       });
     });
@@ -38,14 +40,14 @@ class Themes {
     return promise;
   }
 
-  collectThemes(base) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
+  collect(base) {
+    let self = this;
+    return co(function *() {
+      let folders = fs.readdirSync(base),
+          Themes = db.table('themes');
 
-    let folders = fs.readdirSync(base),
-        Themes = db.table('themes');
+      let themes = yield Themes.where({});
 
-    Themes.where({}).then((themes)=> {
       for(let i=0;i<themes.length;i++) {
         let theme = themes[i],
             folder = path.join(base, theme.folder);
@@ -72,16 +74,12 @@ class Themes {
         }
 
         let themeConfig = fs.readJSONSync(configPath);
-        Themes.insert({
+        yield Themes.insert({
           "name": themeConfig.name,
           "folder": folder
-        }).then();
+        });
       }
-
-      deferred.resolve();
     });
-
-    return promise;
   }
 
   getActiveTheme() {
@@ -97,6 +95,10 @@ class Themes {
     });
 
     return promise;
+  }
+
+  getActiveThemeFolder() {
+
   }
 
   activateTheme(theme) {
