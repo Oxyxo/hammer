@@ -1,0 +1,7 @@
+{
+  "name": "public",
+  "description": "Create and maintain public folders on the go",
+  "main": "index.js",
+  "author": "Jeroen Rinzema",
+  "hammer": "0.1.x"
+}
