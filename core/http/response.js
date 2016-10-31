@@ -68,6 +68,10 @@ class Response {
         root = yield root();
       }
 
+      if(!root) {
+        return yield *next;
+      }
+
       let file = this.url.replace(url, '');
       if(_.pathExists(path.join(root, file), 'isFile')) {
         return yield send(this, file, {root: root});
