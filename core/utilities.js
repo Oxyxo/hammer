@@ -28,6 +28,7 @@ class Utilities {
       "decode": this.decode,
       "fileType": this.fileType,
       "joinUrl": this.joinUrl,
+      "isPromise": this.isPromise,
       "normalizeUrl": this.normalizeUrl
     });
   }
@@ -138,6 +139,18 @@ class Utilities {
 
     var joined = [].slice.call(input, 0).join('/');
     return _.normalizeUrl(joined, options);
+  }
+
+  /**
+   * This function checks if the given obj
+   * is a promise.
+   * @method    Utilites@isPromise
+   * @example   _.isPromise(new Promise())
+   * @param     {Promise} obj the variable that you want to check if a promise.
+   * @returns   {Boolean} returns true if a promise false if not.
+   */
+  isPromise(obj) {
+    return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
   }
 }
 
