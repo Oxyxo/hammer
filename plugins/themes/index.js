@@ -92,6 +92,18 @@ class Themes {
     });
   }
 
+  folder() {
+    let self = this;
+    return co(function *() {
+      let theme = yield self.active();
+      if(!theme) {
+        return;
+      }
+
+      return path.join(config.get.themes.themesFolder, theme.folder);
+    });
+  }
+
   template(template) {
     let self = this;
     return co(function *() {
@@ -101,7 +113,8 @@ class Themes {
         return new Error('no active theme');
       }
 
-      let file = path.join(config.get.themes.themesFolder, theme.folder, config.get.themes.templatesFolder, template);
+      let folder = yield self.folder();
+      let file = path.join(folder, config.get.themes.templatesFolder, template);
 
       if(!_.pathExists(file)) {
         return new Error('template does not exists');
