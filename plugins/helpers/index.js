@@ -40,7 +40,7 @@ module.exports = class Helpers {
           continue;
         }
 
-        promises.push(themes.getTemplate(arg));
+        promises.push(themes.template(arg));
       }
 
       let data = yield Promise.all(promises);

@@ -15,7 +15,6 @@ class Themes {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
-    this.active;
     config.default = {
       "themes": {
         "themesFolder": path.join(process.cwd(), 'themes'),
@@ -82,48 +81,29 @@ class Themes {
     });
   }
 
-  getActiveTheme() {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    let Themes = db.table('themes');
-    Themes.where('active', 1).then((theme)=> {
-      if(!theme) {
-        return deferred.reject();
-      }
-      deferred.resolve(theme[0]);
+  get active() {
+    return co(function *() {
+      let theme = yield Themes.where('active', 1);
+      return theme;
     });
-
-    return promise;
   }
 
-  getActiveThemeFolder() {
+  template(template) {
+    return co(function *() {
+      let theme = yield this.active;
 
-  }
-
-  activateTheme(theme) {
-    db.table('themes').where('folder', theme).update('active', 1);
-  }
-
-  getTemplate(template) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    this.getActiveTheme().then((theme)=> {
       if(!theme) {
-        return deferred.reject(new Error('no active theme'));
+        return new Error('no active theme');
       }
 
       let file = path.join(config.get.themes.themesFolder, theme.folder, config.get.themes.templatesFolder, template);
 
       if(!_.pathExists(file)) {
-        return deferred.reject(new Error('template does not exists'));
+        return new Error('template does not exists');
       }
 
-      deferred.resolve(fs.readFileSync(file, 'utf-8'));
+      return fs.readFileSync(file, 'utf-8');
     });
-
-    return promise;
   }
 }
 

@@ -108,7 +108,7 @@ module.exports = class Pages extends Api {
         page.data = render.pageData(parsed);
       }
 
-      let template = yield themes.getTemplate(page.template).catch(()=> {});
+      let template = yield themes.template(page.template).catch(()=> {});
       if(!template) {
         return;
       }
