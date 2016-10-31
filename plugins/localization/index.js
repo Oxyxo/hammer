@@ -20,7 +20,7 @@ module.exports = class Loc {
     };
 
     db.addColumnsToTable('pages', {
-      "lng": {"type": "string", "nullable": false, "defaultTo": "en", "maxlength": 5}
+      "lng": {"type": "string", "maxlength": 6, "nullable": false, "defaultTo": "en"}
     });
 
     middleware.on('on request', this.onRequest);
