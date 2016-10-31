@@ -64,8 +64,8 @@ class Response {
       }
 
       root = root;
-      if(_.isFunction(root) || _.isPromise(root)) {
-        root = yield root;
+      if(_.isFunction(root)) {
+        root = yield root();
       }
 
       let file = this.url.replace(url, '');
