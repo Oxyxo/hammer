@@ -64,7 +64,7 @@ class Response {
       }
 
       root = root;
-      if(_.isFunction(root)) {
+      if(_.isFunction(root) || _.isPromise(root)) {
         root = yield root;
       }
 
