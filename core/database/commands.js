@@ -40,13 +40,40 @@ class Commands {
 
   addColumns(tableName, schema, db = database) {
     //TODO: return a promise
+    //FIXME: for some reason was i not able to call the function addTableColumn the column was not created if i did so
     (db.knex || db).schema.table(tableName, (table)=> {
-      _.each(schema, (column, key)=> {
-        (db.knex || db).schema.hasColumn(tableName, key).then((exists) => {
-          if(!exists) {
-            return this.addTableColumn(table, key, column);
-          }
-        });
+      _.each(schema, (columnSpec, columnName)=> {
+        let column;
+
+        if(columnSpec.type === 'text' && columnSpec.hasOwnProperty('fieldtype')) {
+          column = table[columnSpec.type](columnName, columnSpec.fieldtype);
+        } else if(columnSpec.type === 'string' && columnSpec.hasOwnProperty('maxlength')) {
+          column = table[columnSpec.type](columnName, columnSpec.maxlength);
+        } else {
+          column = table[columnSpec.type](columnName);
+        }
+
+        if(columnSpec.hasOwnProperty('nullable') && columnSpec.nullable === true) {
+          column.nullable();
+        } else {
+          column.notNullable();
+        }
+        if(columnSpec.hasOwnProperty('primary') && columnSpec.primary === true) {
+          column.primary();
+        }
+        if(columnSpec.hasOwnProperty('unique') && columnSpec.unique) {
+          column.unique();
+        }
+        if(columnSpec.hasOwnProperty('unsigned') && columnSpec.unsigned) {
+          column.unsigned();
+        }
+        if(columnSpec.hasOwnProperty('references')) {
+          // check if table exists?
+          column.references(columnSpec.references);
+        }
+        if(columnSpec.hasOwnProperty('defaultTo')) {
+          column.defaultTo(columnSpec.defaultTo);
+        }
       });
     }).then();
   }
