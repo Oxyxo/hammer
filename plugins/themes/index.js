@@ -81,16 +81,21 @@ class Themes {
     });
   }
 
-  get active() {
+  active() {
+    let Themes = db.model('themes');
     return co(function *() {
-      let theme = yield Themes.where('active', 1);
-      return theme;
+      let theme = yield Themes.forge().where('active', 1).fetch();
+      if(!theme) {
+        return null;
+      }
+      return theme.toJSON();
     });
   }
 
   template(template) {
+    let self = this;
     return co(function *() {
-      let theme = yield this.active;
+      let theme = yield self.active();
 
       if(!theme) {
         return new Error('no active theme');

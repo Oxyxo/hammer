@@ -108,7 +108,7 @@ module.exports = class Pages extends Api {
         page.data = render.pageData(parsed);
       }
 
-      let template = yield themes.template(page.template).catch(()=> {});
+      let template = yield themes.template(page.template).catch(()=>{});
       if(!template) {
         return;
       }
@@ -132,7 +132,7 @@ module.exports = class Pages extends Api {
         }
       });
 
-      let data = yield Pages.where(query).fetch();
+      let data = yield Pages.forge().where(query).fetch();
       if(!data) {
         return false;
       }
