@@ -30,7 +30,6 @@
     "bluebird": "^3.4.6",
     "bookshelf": "0.10.2",
     "co": "^4.6.0",
-    "colors": "^1.1.2",
     "debug": "^2.2.0",
     "fs-extra": "^0.30.0",
     "handlebars": "^4.0.5",

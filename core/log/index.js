@@ -1,20 +1,11 @@
 //TODO: update way how logging is done.
 'use strict';
 
-const colors = require('colors');
+const chalk = require('chalk');
 const hbs = require('handlebars');
 const schema = require('./schema');
 const emoji = require('node-emoji');
 const config = require('../config');
-
-colors.setTheme({
-  "error": "red",
-  "warning": "yellow",
-  "depecrated": "red",
-  "debug": "blue",
-  "log": "green",
-  "docs": "yellow"
-});
 
 module.exports = (e, d = {})=> {
   if(!config.get.logging) {
@@ -32,9 +23,7 @@ module.exports = (e, d = {})=> {
   let event = schema[e],
       message = hbs.compile(emoji.emojify(event.message));
 
-  message = message(d)[event.level];
-
-  console.log(message);
+  console.log(message(d));
   if(event.docs) {
     console.log(event.docs.docs);
   }
