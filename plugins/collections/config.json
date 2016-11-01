@@ -1,0 +1,7 @@
+{
+  "name": "collections",
+  "description": "store and get collections of data.",
+  "author": "Jeroen Rinzema",
+  "main": "index.js",
+  "hammer": "0.1.x"
+}
