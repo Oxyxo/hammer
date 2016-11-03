@@ -72,6 +72,10 @@ class Response {
         }
       }
 
+      if(_.isArray(root)) {
+        root = path.join.apply(this, root);
+      }
+
       if(!root) {
         return yield *next;
       }
