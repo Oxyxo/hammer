@@ -1,9 +1,9 @@
 'use strict';
 
-const _ = require('lodash');
-const Module = require('module');
-const config = require('./config');
-const modules = require('./modules');
+const _         = require('lodash');
+const Module    = require('module');
+const config    = require('./config');
+const modules   = require('./modules');
 
 class Require {
   constructor() {

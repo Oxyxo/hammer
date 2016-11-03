@@ -1,6 +1,6 @@
-const http = require('@hammer/http');
-const config = require('@hammer/config');
-const themes = require('@hammer/themes');
+const http    = require('@hammer/http');
+const config  = require('@hammer/config');
+const themes  = require('@hammer/themes');
 
 const path = require('path');
 

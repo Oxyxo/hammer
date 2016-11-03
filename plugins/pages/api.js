@@ -1,7 +1,7 @@
 'use strict';
 
-const http = require('@hammer/http');
-const db = require('@hammer/database');
+const http  = require('@hammer/http');
+const db    = require('@hammer/database');
 
 const _ = require('lodash');
 

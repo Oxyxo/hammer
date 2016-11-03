@@ -1,12 +1,12 @@
 'use strict';
 
-const _ = require('lodash');
-const knex = require('knex');
-const bookshelf = require('bookshelf');
-const config = require('../config');
-const commands = require('./commands');
-const schemas = require('./schemas');
-const modules = require('../modules');
+const _           = require('lodash');
+const knex        = require('knex');
+const bookshelf   = require('bookshelf');
+const config      = require('../config');
+const commands    = require('./commands');
+const schemas     = require('./schemas');
+const modules     = require('../modules');
 
 class Database {
   constructor() {

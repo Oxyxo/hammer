@@ -1,8 +1,8 @@
 'use strict';
 
-const _ = require('lodash');
-const path = require('path');
-const render = require('./render');
+const _       = require('lodash');
+const path    = require('path');
+const render  = require('./render');
 
 /**
  * With the config class can you

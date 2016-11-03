@@ -1,7 +1,7 @@
 'use strict';
 
-const _ = require('lodash');
-const async = require('async');
+const _       = require('lodash');
+const async   = require('async');
 
 /**
  * This class can be used to call and listen

@@ -1,9 +1,9 @@
 'use strict';
 
-const db = require('@hammer/database');
-const config = require('@hammer/config');
-const render = require('@hammer/render');
-const middleware = require('@hammer/middleware');
+const db          = require('@hammer/database');
+const config      = require('@hammer/config');
+const render      = require('@hammer/render');
+const middleware  = require('@hammer/middleware');
 
 const _ = require('lodash');
 

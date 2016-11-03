@@ -1,9 +1,9 @@
 'use strict';
 
-const uuid = require('node-uuid');
-const bcrypt = require('bcryptjs');
-const config = require('./config');
-const database = require('./database');
+const uuid      = require('node-uuid');
+const bcrypt    = require('bcryptjs');
+const config    = require('./config');
+const database  = require('./database');
 
 class Authentication {
   initialize() {

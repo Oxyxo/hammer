@@ -1,7 +1,7 @@
 'use strict';
 
-const database = require('./');
-const _ = require('lodash');
+const database  = require('./');
+const _         = require('lodash');
 
 class Commands {
   addTableColumn(table, columnName, columnSpec) {

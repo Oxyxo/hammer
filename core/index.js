@@ -1,18 +1,18 @@
 'use strict';
 
-const log = require('./log');
-const path = require('path');
-const http = require('./http');
-const config = require('./config');
-const render = require('./render');
-const plugins = require('./plugins');
-const modules = require('./modules');
-const _require = require('./require');
-const intercom = require('./intercom');
-const database = require('./database');
-const utilities = require('./utilities');
-const middleware = require('./middleware');
-const authentication = require('./authentication');
+const log             = require('./log');
+const path            = require('path');
+const http            = require('./http');
+const config          = require('./config');
+const render          = require('./render');
+const plugins         = require('./plugins');
+const modules         = require('./modules');
+const _require        = require('./require');
+const intercom        = require('./intercom');
+const database        = require('./database');
+const utilities       = require('./utilities');
+const middleware      = require('./middleware');
+const authentication  = require('./authentication');
 
 /**
  * This class in constructed when a new

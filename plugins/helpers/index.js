@@ -1,8 +1,8 @@
 'use strict';
 
-const render = require('@hammer/render');
-const themes = require('@hammer/themes');
-const intercom = require('@hammer/intercom');
+const render    = require('@hammer/render');
+const themes    = require('@hammer/themes');
+const intercom  = require('@hammer/intercom');
 
 const _ = require('lodash');
 const helpers = require('@hammer/helpers');

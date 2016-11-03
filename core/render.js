@@ -1,11 +1,11 @@
 'use strict';
 
-const co = require('co');
-const _ = require('lodash');
-const marked = require('marked');
-const bluebird = require('bluebird');
-const promiseHbs = require('promised-handlebars');
-const hbs = promiseHbs(require('handlebars'), {Promise, bluebird});
+const co          = require('co');
+const _           = require('lodash');
+const marked      = require('marked');
+const bluebird    = require('bluebird');
+const promiseHbs  = require('promised-handlebars');
+const hbs         = promiseHbs(require('handlebars'), {Promise, bluebird});
 
 /**
  * This function handles all render functions.

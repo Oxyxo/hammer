@@ -1,9 +1,9 @@
 'use strict';
 
-const fs = require('fs');
-const _ = require('lodash');
-const mime = require('mime');
-const config = require('./config');
+const fs      = require('fs');
+const _       = require('lodash');
+const mime    = require('mime');
+const config  = require('./config');
 
 /**
  * The utilities class contains small

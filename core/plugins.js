@@ -2,19 +2,19 @@
 
 //TODO: Make plausibility to check/add dependencies
 
-const _ = require('lodash');
-const log = require('./log');
-const path = require('path');
-const async = require('async');
-const fs = require('fs-extra');
-const http = require('./http');
-const semver = require('semver');
-const render = require('./render');
-const config = require('./config');
-const urljoin = require('url-join');
-const pk = require('../package.json');
-const intercom = require('./intercom');
-const debug = require('debug')('plugins');
+const _         = require('lodash');
+const log       = require('./log');
+const path      = require('path');
+const async     = require('async');
+const fs        = require('fs-extra');
+const http      = require('./http');
+const semver    = require('semver');
+const render    = require('./render');
+const config    = require('./config');
+const urljoin   = require('url-join');
+const pk        = require('../package.json');
+const intercom  = require('./intercom');
+const debug     = require('debug')('plugins');
 
 class Plugins {
   constructor() {

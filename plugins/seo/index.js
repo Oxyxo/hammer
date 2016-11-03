@@ -1,11 +1,11 @@
 'use strict';
 
-const db = require('@hammer/database');
-const config = require('@hammer/config');
-const render = require('@hammer/render');
+const db      = require('@hammer/database');
+const config  = require('@hammer/config');
+const render  = require('@hammer/render');
 
-const fs = require('fs');
-const path = require('path');
+const fs      = require('fs');
+const path    = require('path');
 
 class Seo {
   initialize() {

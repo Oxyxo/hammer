@@ -1,11 +1,11 @@
 //TODO: update way how logging is done.
 'use strict';
 
-const chalk = require('chalk');
-const hbs = require('handlebars');
-const schema = require('./schema');
-const emoji = require('node-emoji');
-const config = require('../config');
+const chalk     = require('chalk');
+const hbs       = require('handlebars');
+const schema    = require('./schema');
+const emoji     = require('node-emoji');
+const config    = require('../config');
 
 module.exports = (e, d = {})=> {
   if(!config.get.logging) {

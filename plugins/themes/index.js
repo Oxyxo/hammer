@@ -1,14 +1,14 @@
 'use strict';
 
-const db = require('@hammer/database');
-const config = require('@hammer/config');
+const db      = require('@hammer/database');
+const config  = require('@hammer/config');
 const plugins = require('@hammer/plugins');
 
-const co = require('co');
-const _ = require('lodash');
-const path = require('path');
-const fs = require('fs-extra');
-const async = require('async');
+const co      = require('co');
+const _       = require('lodash');
+const path    = require('path');
+const fs      = require('fs-extra');
+const async   = require('async');
 
 class Themes {
   constructor(Hammer) {

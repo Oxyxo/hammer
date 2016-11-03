@@ -3,16 +3,16 @@
 /* jshint -W124 */
 'use strict';
 
-const Koa = require('koa');
-const net = require('net');
-const _ = require('lodash');
-const path = require('path');
-const log = require('../log');
-const config = require('../config');
-const router = require('koa-router');
-const modules = require('../modules');
-const Response = require('./response');
-const middleware = require('../middleware');
+const Koa         = require('koa');
+const net         = require('net');
+const _           = require('lodash');
+const path        = require('path');
+const log         = require('../log');
+const config      = require('../config');
+const router      = require('koa-router');
+const modules     = require('../modules');
+const Response    = require('./response');
+const middleware  = require('../middleware');
 
 /**
  * This class handles the http server and
