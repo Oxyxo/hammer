@@ -1,12 +1,14 @@
 'use strict';
 
+//TODO: add passport to Authentication to support for example facebook, google, github, and twitter login
+
 const uuid      = require('node-uuid');
 const bcrypt    = require('bcryptjs');
 const config    = require('./config');
 const database  = require('./database');
 
 class Authentication {
-  initialize() {
+  init() {
     let deferred = Promise.defer(),
         promise = deferred.promise;
 
