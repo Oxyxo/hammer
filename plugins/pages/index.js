@@ -7,9 +7,9 @@ const themes      = require('@hammer/themes');
 const config      = require('@hammer/config');
 const middleware  = require('@hammer/middleware');
 
-const co = require('co');
-const _ = require('lodash');
-const Api = require('./api');
+const co          = require('co');
+const _           = require('lodash');
+const Api         = require('./api');
 
 /**
  * This class handles Everything
@@ -26,28 +26,22 @@ module.exports = class Pages extends Api {
   constructor() {
     super();
 
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
+    return co(function *() {
+      console.log('hey');
+      config.default = {
+        "pages": {
+          "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
+        }
+      };
 
-    config.default = {
-      "pages": {
-        "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
-      }
-    };
-
-    Promise.all([
-      db.newTable('pages', {
+      yield db.newTable('pages', {
         "id": {"type": "increments", "nullable": false, "primary": true},
         "title": {"type": "string", "maxlength": 150, "nullable": false},
         "url": {"type": "string", "nullable": false, "unique": true},
         "template": {"type": "string", "nullable": false},
         "data": {"type": "json", "nullable": true}
-      })
-    ]).then(()=> {
-      deferred.resolve(this);
+      });
     });
-
-    return promise;
   }
 
   get routes() {
