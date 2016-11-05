@@ -1,5 +1,6 @@
 'use strict';
 
+const co              = require('co');
 const log             = require('./log');
 const path            = require('path');
 const http            = require('./http');
@@ -30,36 +31,31 @@ class Hammer {
    * @constructs Hammer
    */
   constructor(_config = {}) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
+    let self = this;
+    return co(function *() {
+      modules.extend('log', log);
+      modules.extend('intercom', intercom);
+      modules.extend('middleware', middleware);
+      modules.extend('plugins', plugins.get);
+      modules.extend('config', config);
+      modules.extend('authentication', authentication);
+      modules.extend('render', render);
+      modules.extend('require', _require);
 
-    global.Hammer = this;
-    config.set = _config;
+      global.Hammer = self;
+      config.set = _config;
 
-    new utilities(this);
-    Promise.all([
-      database.open(),
-      http.open(),
-      authentication.initialize()
-    ]).then(()=> {
-      plugins.initialize();
-      deferred.resolve(this);
+      new utilities(self);
+      yield Promise.all([
+        database.open(),
+        http.open(),
+        authentication.init(),
+        plugins.init()
+      ]);
 
+      deferred.resolve(self);
       log('hammer.running', {"port": config.get.port});
-    }).catch((err)=> {
-      console.trace(err); //NOTE: shall we use something else then console.trace?
     });
-
-    modules.extend('log', log);
-    modules.extend('intercom', intercom);
-    modules.extend('middleware', middleware);
-    modules.extend('plugins', plugins.get);
-    modules.extend('config', config);
-    modules.extend('authentication', authentication);
-    modules.extend('render', render);
-    modules.extend('require', _require);
-
-    return promise;
   }
 
   /**
