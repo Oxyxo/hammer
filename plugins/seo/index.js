@@ -8,7 +8,7 @@ const fs      = require('fs');
 const path    = require('path');
 
 class Seo {
-  initialize() {
+  constructor() {
     config.default = {
       "seo": {
         "templates": path.join(__dirname, 'templates')
