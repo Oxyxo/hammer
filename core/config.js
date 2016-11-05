@@ -28,10 +28,10 @@ class Config {
       "hammerRoot": __dirname,
       "hashRounds": 10,
       "plugins": {
-        "corePlugins": path.join(__dirname, '../plugins'),
-        "pluginFolders": [path.join(process.cwd(), 'plugins')],
-        "configJSON": "config.json",
-        "baseUrl": "/hammer/"
+        "core": path.join(__dirname, '../plugins'),
+        "folder": [path.join(process.cwd(), 'plugins')],
+        "config": "config.json",
+        "url": "/hammer/"
       },
       "logging": true,
       "requirePrefix": { //NOTE: improve the regex? (i am not a regex jedi)
