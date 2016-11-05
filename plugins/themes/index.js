@@ -12,31 +12,28 @@ const async   = require('async');
 
 class Themes {
   constructor(Hammer) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
+    return co(function *() {
+      config.default = {
+        "themes": {
+          "themesFolder": path.join(process.cwd(), 'themes'),
+          "templatesFolder": "templates",
+          "configFile": "theme.json"
+        }
+      };
 
-    config.default = {
-      "themes": {
-        "themesFolder": path.join(process.cwd(), 'themes'),
-        "templatesFolder": "templates",
-        "configFile": "theme.json"
-      }
-    };
+      yield Promise.all([
+        db.newTable('themes', {
+          "id": {"type": "increments", "nullable": false, "primary": true},
+          "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
+          "folder": {"type": "string", "nullable": false},
+          "active": {"type": "boolean", "nullable": false, "defaultTo": false}
+        })
+      ]);
 
-    Promise.all([
-      db.newTable('themes', {
-        "id": {"type": "increments", "nullable": false, "primary": true},
-        "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
-        "folder": {"type": "string", "nullable": false},
-        "active": {"type": "boolean", "nullable": false, "defaultTo": false}
-      })
-    ]).then(()=> {
       this.collect(config.get.themes.themesFolder).then(()=> {
         deferred.resolve(this);
       });
     });
-
-    return promise;
   }
 
   collect(base) {
