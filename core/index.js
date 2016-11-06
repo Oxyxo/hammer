@@ -53,8 +53,8 @@ class Hammer {
         plugins.init()
       ]);
 
-      deferred.resolve(self);
       log('hammer.running', {"port": config.get.port});
+      return self;
     });
   }
 
@@ -94,11 +94,11 @@ class Hammer {
 }
 
 process.on('uncaughtException', function (exception) {
-  //console.log(exception);
+  console.log(exception);
 });
 
 process.on('unhandledRejection', (reason, p) => {
-  //console.log("Unhandled Rejection at: Promise ", p, " reason: ", reason);
+  console.log("Unhandled Rejection at: Promise ", p, " reason: ", reason);
 });
 
 module.exports = Hammer;
