@@ -104,6 +104,7 @@ class Render {
       for(let i=0;i<name.length;i++) {
         hbs.registerHelper(name[i], this.helperHandle(fn));
       }
+      return;
     }
 
     hbs.registerHelper(name, this.helperHandle(fn));
