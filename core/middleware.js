@@ -59,8 +59,7 @@ class Middleware {
         promise = deferred.promise;
 
     if(!this._events[name]) {
-      //TODO: check if we should return a true boolean or the given args?
-      deferred.resolve(true);
+      deferred.resolve(args);
       return promise;
     }
 
