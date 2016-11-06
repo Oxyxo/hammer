@@ -146,51 +146,6 @@ class HTTP extends Response {
 
     return promise;
   }
-
-  //TODO: Deprecated remove later on
-  get route() {
-    return new Proxy({}, {
-      get: (func, method)=> {
-        return (url, fn)=> {
-          if(Array.isArray(url)) {
-            for(let i=0;i<url.length;i++) {
-              let c = url[i];
-              if(Array.isArray(c)) {
-                url[i] = _.joinUrl(c);
-              }
-            }
-          }
-
-          this.router[method](url, fn);
-
-          return new Proxy({
-            destroy: ()=> {
-              let stack = this.router.stack;
-
-              if(!Array.isArray(fn)) {
-                fn = [fn];
-              }
-
-              for(let i=0;i<stack.length;i++) {
-                let route = stack[i];
-
-                for(let i=0;i<fn.length;i++) {
-                  if(route.stack.indexOf(fn[i]) >= 0) {
-                    delete this.router.stack[i];
-                  }
-                }
-              }
-            }
-          }, {});
-        };
-      }
-    });
-  }
-
-  //TODO: Deprecated remove later on
-  get new() {
-    return this;
-  }
 }
 
 module.exports = new HTTP();
