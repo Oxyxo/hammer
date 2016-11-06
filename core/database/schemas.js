@@ -17,5 +17,11 @@ module.exports = {
     "refresh": {"type": "string", "nullable": false, "unique": true},
     "user": {"type": "integer", "nullable": false},
     "created_at": {"type": "dateTime", "nullable": false}
+  },
+  "plugins": {
+    "id": {"type": "increments", "nullable": false, "primary": true},
+    "name": {"type": "string", "maxlength": 150, "nullable": false, "unique": true},
+    "folder": {"type": "string", "nullable": false},
+    "active": {"type": "boolean", "nullable": false, "defaultTo": false}
   }
 };
