@@ -21,12 +21,12 @@ class Require {
         let module = path.match(prefix.module);
         module.splice(0,1);
         //NOTE: in future plausibility to add adding nested require require('@hammer/render/serve')
+        //TODO: move getters in some way out of the proxy (plugins still need to be collected)
 
         if(module && _.isArray(module)) {
-          let getters = [Hammer.modules, Hammer.plugins.get];
-
           return new Proxy({}, {
             get: function(func, name) {
+              let getters = [Hammer.modules, Hammer.plugins.all];
               for(let i=0;i<getters.length;i++) {
                 if(getters[i] && getters[i][module[0]] && getters[i][module[0]][name]) {
                   return getters[i][module[0]][name];
@@ -34,9 +34,11 @@ class Require {
               }
             },
             set: function(target, name, value) {
+              let getters = [Hammer.modules, Hammer.plugins.all];
               for(let i=0;i<getters.length;i++) {
                 if(getters[i] && getters[i][module[0]] && getters[i][module[0]][name]) {
-                  return getters[i][module[0]][name] = value;
+                  getters[i][module[0]][name] = value;
+                  return getters[i][module[0]][name];
                 }
               }
             }
