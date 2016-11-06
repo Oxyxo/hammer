@@ -58,6 +58,7 @@ class Response {
    */
   static(url, root) {
     url = new RegExp(`^${url}`);
+
     this.router.use(function *(next) {
       if(!url.test(this.url)) {
         return yield *next;
