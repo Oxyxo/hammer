@@ -12,6 +12,8 @@ const async   = require('async');
 
 class Themes {
   constructor(Hammer) {
+    let self = this;
+
     return co(function *() {
       config.default = {
         "themes": {
@@ -30,9 +32,8 @@ class Themes {
         })
       ]);
 
-      this.collect(config.get.themes.themesFolder).then(()=> {
-        deferred.resolve(this);
-      });
+      yield self.collect(config.get.themes.themesFolder);
+      return self;
     });
   }
 

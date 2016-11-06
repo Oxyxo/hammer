@@ -25,12 +25,12 @@ module.exports = class Pages extends Api {
    */
   constructor() {
     super();
+    let self = this;
 
     return co(function *() {
-      console.log('hey');
       config.default = {
         "pages": {
-          "baseUrl": _.joinUrl(config.get.plugins.baseUrl, "/pages")
+          "base": "/pages"
         }
       };
 
@@ -41,6 +41,8 @@ module.exports = class Pages extends Api {
         "template": {"type": "string", "nullable": false},
         "data": {"type": "json", "nullable": true}
       });
+
+      return self;
     });
   }
 
@@ -50,16 +52,16 @@ module.exports = class Pages extends Api {
         "method": "get",
         "url": "*",
         "fn": this.handle(),
-        "noBaseUrl": true
+        "base": false
       },
       {
         "method": "get",
-        "url": [config.get.pages.baseUrl, "/json/:id"],
+        "url": [config.get.pages.base, "/json/:id"],
         "fn": this.getJSONPage()
       },
       {
         "method": "get",
-        "url": [config.get.pages.baseUrl, "/:id"],
+        "url": [config.get.pages.base, "/:id"],
         "fn": this.getRenderedPage()
       }
     ];
