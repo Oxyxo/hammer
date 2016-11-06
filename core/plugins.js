@@ -1,7 +1,12 @@
 'use strict';
 
+//TODO: All plugins (active and inactive) need to be stored in the database
 //TODO: Make plausibility to check/add dependencies
+//TODO: Do not start a new plugin that is not stored in the database. Each plugin needs to be started by calling the plugin run function or something.
+//TODO: Add hammer version check
+//TODO: Add error logs again
 
+const co        = require('co');
 const _         = require('lodash');
 const log       = require('./log');
 const path      = require('path');
@@ -14,234 +19,144 @@ const config    = require('./config');
 const urljoin   = require('url-join');
 const pk        = require('../package.json');
 const intercom  = require('./intercom');
-const debug     = require('debug')('plugins');
 
 class Plugins {
   constructor() {
     this._plugins = {};
   }
 
-  initialize() {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    let plugins = [],
-        push = Array.prototype.push;
-
-    this.mkdirsPluginFolders();
-
-    if(config.get.plugins.corePlugins) {
-      push.apply(plugins, this.collectPlugins(config.get.plugins.corePlugins, true));
+  get all() {
+    let plugins = {};
+    for(var key in this._plugins) {
+      if(this._plugins.hasOwnProperty(key)) {
+        plugins[key] = this._plugins[key].class;
+      }
     }
 
-    if(config.get.plugins.pluginFolders) {
-      push.apply(plugins, this.collectPlugins(config.get.plugins.pluginFolders));
-    }
+    return plugins;
+  }
 
-    if(plugins.length <= 0) {
-      return deferred.resolve();
-    }
+  init() {
+    let self = this;
+    return co(function *() {
+      const _config = config.get.plugins;
 
-    this.runCollectedPlugins(plugins).then(()=> {
-      deferred.resolve();
+      yield self.collect(_config.core, true);
+      yield self.collect(_config.folder);
+
       log('plugins.running');
-      intercom.emit('plugins running', this._plugins);
-
-      for(let key in this._plugins) {
-        if(this._plugins.hasOwnProperty(key) && this._plugins[key]) {
-          let plugin = this._plugins[key];
-          if(plugin.initialize) {
-            plugin.initialize();
-          }
-        }
-      }
-    }).catch(()=> {
-      deferred.reject();
     });
-
-    return promise;
   }
 
-  mkdirsPluginFolders() {
-    let pluginFolders = config.get.plugins.pluginFolders;
-
-    for(let i=0;i<pluginFolders.length;i++) {
-      fs.mkdirsSync(pluginFolders[i]);
-    }
-
-    return pluginFolders;
-  }
-
-  deactivatePlugin(plugin) {
-    //TODO: create error logs
-    if(!this._plugins[plugin]) {
-      return;
-    }
-
-    let p = this._plugins[plugin];
-
-    if(!p.deactivate) {
-      return;
-    }
-
-    p.deactivate();
-    delete this._plugins[plugin];
-  }
-
-  collectPlugins(folders, core = false) {
-    if(!folders) {
-      return new Error('no folder defined');
-    }
-
-    if(!Array.isArray(folders)) {
-      folders = [folders];
-    }
-
-    let _plugins = [];
-    for(let i=0;i<folders.length;i++) {
-      let folder = folders[i];
-      let plugins = fs.readdirSync(folder);
-
-      for(let i=0;i<plugins.length;i++) {
-        let plugin = path.join(folder, plugins[i]);
-        if(_.pathExists(plugin, 'isDirectory')) {
-          _plugins.push({"folder": plugin, "core": core});
-        }
-      }
-    }
-
-    return _plugins;
-  }
-
-  runCollectedPlugins(plugins) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    let promises = [];
-    for(let i=0;i<plugins.length;i++) {
-      let plugin = plugins[i];
-      promises.push(this.runPlugin(plugin.folder, plugin.core));
-    }
-
-    Promise.all(promises).then(()=> {
-      deferred.resolve();
-    }).catch(()=> {
-      deferred.reject();
-    });
-
-    return promise;
-  }
-
-  runPlugin(folder, core) {
-    let deferred = Promise.defer(),
-        promise = deferred.promise;
-
-    let configPath = path.join(folder, config.get.plugins.configJSON);
-    fs.readJson(configPath, (err, pluginConfig)=> {
-      if(err) {
-        let message = log('plugin.config.not.json', {"config": configPath});
-        return deferred.reject(new Error(message));
-      }
-
-      if(!pluginConfig.name) {
-        let message = log('no.plugin.name', {"config": configPath});
-        return deferred.reject(new Error(message));
-      }
-
-      if(this._plugins[pluginConfig.name]) {
-        let message = log('plugin.name.already.in.use', {"name": pluginConfig.name});
-        return deferred.reject(new Error(message));
-      }
-
-      if(!pluginConfig.hammer) {
-        let message = log('plugin.no.compatible.hammer.version.defined', {"config": pluginConfig});
-        return deferred.reject(new Error(message));
-      }
-
-      let mainFile = path.join(folder, pluginConfig.main);
-      if(!_.pathExists(mainFile, 'isFile')) {
-        let message = log('no.plugin.main.file', {"config": configPath});
-        return deferred.reject(new Error(message));
-      }
-
-      let plugin = require(mainFile);
-      if(!_.isFunction(plugin)) {
-        let message = log('plugin.is.not.class', {"plugin": mainFile});
-        return deferred.reject(new Error(message));
-      }
-
-      if(!semver.satisfies(pk.version, pluginConfig.hammer)) {
-        log('plugin.not.compatible.with.current.hammer.version', {"name": pluginConfig.name, "version": pluginConfig.version});
-      }
-
-      let _plugin = new plugin();
-
-      promise.then((...args)=> {
-        this._plugins[pluginConfig.name] = _plugin;
-        this.initRoutes(_plugin);
-        this.initHelpers(_plugin);
-
-        debug('%s running', pluginConfig.name);
-      });
-
-      if(!_.isFunction(_plugin.then)) {
-        deferred.resolve();
+  /**
+   * this function Collects all plugins
+   * found in the given path.
+   * @method   Plugins@collect
+   * @param    {Array} folders Path to the given folder where all plugins need to be collected from.
+   * @param    {Boolean} core Core plugins are imediatly activated
+   */
+  collect(folders, core) {
+    let self = this;
+    return co(function *() {
+      if(!folders) {
         return;
       }
 
-      _plugin.then((plugin)=> {
-        _plugin = plugin;
-        deferred.resolve();
-      }).catch(()=> {
-        deferred.reject();
-      });
-    });
+      if(!_.isArray(folders)) {
+        folders = [folders];
+      }
 
-    return promise;
+      for(let i=0;i<folders.length;i++) {
+        let folder = folders[i];
+        let plugins = fs.readdirSync(folder);
+
+        for(let i=0;i<plugins.length;i++) {
+          let plugin = path.join(folder, plugins[i]);
+
+          if(_.pathExists(plugin, 'isDirectory')) {
+            const _config = self.getConfig(plugin);
+
+            if(!_config) {
+              continue; //TODO: throw error no config found
+            }
+
+            if(!_config.name || self._plugins[_config.name]) {
+              continue; //TODO: throw error that there is already a plugins collected with the same name
+            }
+
+            if(self.invalidConfig(_config)) {
+              continue; //TODO: throw error config is not valid
+            }
+
+            self._plugins[_config.name] = {
+              "folder": plugin,
+              "core": core,
+              "config": _config
+            };
+
+            let _class;
+            if(core) {
+              _class = yield self.activate(self._plugins[_config.name]);
+            }
+
+            self._plugins[_config.name].class = _class;
+          }
+        }
+      }
+
+      return this._plugins;
+    });
   }
 
-  initRoutes(plugin) {
-    if(!plugin.routes) {
-      return;
+  /**
+   * Get the config of a plugin by reading
+   * the main config file.
+   * @method   Plugins@getConfig
+   * @param    {String} folder Path to the plugin
+   */
+  getConfig(folder) {
+    const _config = require(path.join(folder, config.get.plugins.config));
+    if(!_config || !_.isObject(_config)) {
+      return; //TODO: throw error config does not exists or is not a valid json object
+    }
+    return _config;
+  }
+
+  invalidConfig(json) {
+    if(!json.hammer) {
+      //Warning no hammer version defined
     }
 
-    let routes = plugin.routes;
-    if(_.isFunction(routes)) {
-      routes = routes();
+    if(!json.main) {
+      //ERROR no main file defined
     }
+  }
 
-    //TODO: add error logs
-    if(!_.isArray(routes)) {
-      return;
-    }
+  activate(plugin) {
+    let self = this;
+    return co(function *() {
+      let file = path.join(plugin.folder, plugin.config.main);
+      let _plugin = require(file);
 
-    for(let i=0;i<routes.length;i++) {
-      let route = routes[i];
-
-      if(!route.fn && !route.cb) {
-        continue;
+      if(!_.isFunction(_plugin)) {
+        return; //TODO: throw error plugins exports no class
       }
 
-      if(!route.method) {
-        continue;
+      let _p = new _plugin();
+
+      if(_.isPromise(_p)) {
+        _p = yield _p;
       }
 
-      if(!route.url) {
-        continue;
-      }
+      self.initHelpers(_p);
+      self.initRoutes(_p);
 
-      let url = _.joinUrl(config.get.plugins.baseUrl, route.url);
-      if(route.baseUrl) {
-        url = _.joinUrl(route.baseUrl, route.url);
-      }
+      return _p;
+    });
+  }
 
-      if(route.noBaseUrl) {
-        url = route.url;
-      }
+  deactivate() {
 
-      http.route[route.method](url, (route.fn || route.cb));
-      //TODO: add routes to a collection that they can be deleted when a plugin get's deactivated
-    }
   }
 
   initHelpers(plugin) {
@@ -249,38 +164,43 @@ class Plugins {
       return;
     }
 
-    let helpers = plugin.helpers;
-    if(_.isFunction(helpers)) {
-      helpers = helpers();
-    }
+    for(let i=0;i<plugin.helpers.length;i++) {
+      let helper = plugin.helpers[i];
 
-    //TODO: add error logs
-    if(!_.isArray(helpers)) {
-      return;
-    }
-
-    for(let i=0;i<helpers.length;i++) {
-      let helper = helpers[i];
-
-      if(!helper.fn && !helper.cb) {
-        continue;
-      }
-
-      if(!helper.name) {
-        continue;
-      }
-
-      let name = [helper.name];
+      let name = helper.name;
       if(helper.alias) {
-        name.push(...helper.alias);
+        helper.alias.unshift(name);
+        name = helper.alias;
       }
 
       render.helper(name, (helper.fn || helper.cb));
     }
   }
 
-  get get() {
-    return this._plugins;
+  initRoutes(plugin) {
+    if(!plugin.routes) {
+      return;
+    }
+
+    if(!_.isArray(plugin.routes)) {
+      plugin.routes = [plugin.routes];
+    }
+
+    //TODO: add plausibility to set aliases
+    for(let i=0;i<plugin.routes.length;i++) {
+      let route = plugin.routes[i];
+
+      if(route.base !== false) {
+        route.url = _.joinUrl(config.get.plugins.base, route.url);
+      }
+
+      if(route.method == 'static') {
+        http.static(route.url, (route.path || route.folder));
+        continue;
+      }
+
+      http.router[route.method](route.url, (route.cb || route.fn));
+    }
   }
 }
 
