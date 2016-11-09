@@ -86,6 +86,10 @@ class Response {
         return yield send(this, file, {root: root});
       }
 
+      if(path.extname(this.url)) {
+        this.status = 404;
+      }
+
       yield *next;
     });
   }
