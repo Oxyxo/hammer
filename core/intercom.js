@@ -1,6 +1,6 @@
 'use strict';
 
-//TODO: add a way to change string path's to regex in order to use wildcards to listen to events.
+const globRegex = require('glob-to-regexp');
 
 /**
  * The intercom class gives plugins or core
@@ -16,7 +16,7 @@ class Intercom {
    * @constructs Intercom
    */
   constructor() {
-    this._events = {};
+    this._events = [];
   }
 
   /**
@@ -30,10 +30,11 @@ class Intercom {
    * @param    {Function} fn this callback function is called when the event occures.
    */
   on(event, fn) {
-    if(!this._events[event]) {
-      this._events[event] = [];
-    }
-    this._events[event].push(fn);
+    this._events.push({
+      "event": event,
+      "regexp": globRegex(event),
+      "fn": fn
+    });
   }
 
   /**
@@ -49,12 +50,12 @@ class Intercom {
       data = [data];
     }
 
-    if(!this._events[event]) {
-      return;
-    }
-
-    for(let i=0;i<this._events[event].length;i++) {
-      this._events[event][i].apply(null, data);
+    for(let i=0;i<this._events.length;i++) {
+      let e = this._events[i];
+      if(!e.regexp.test(event)) {
+        continue;
+      }
+      e.fn.apply(null, data);
     }
   }
 }
