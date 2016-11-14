@@ -5,12 +5,26 @@ const Module    = require('module');
 const config    = require('./config');
 const modules   = require('./modules');
 
+/**
+ * The require class is used
+ * to override the original require method.
+ * @class Require
+ */
 class Require {
   constructor() {
     this.originalRequire = Module.prototype.require;
     Module.prototype.require = this.require();
   }
 
+  /**
+   * This function is the handle that is being
+   * called when a module is required. This function
+   * checks if the module starts with the set prefix in config
+   * and checks after if the given module is found
+   * in plugins or modules. If not does it call the
+   * original require handle.
+   * @method   Require@require
+   */
   require() {
     let self = this;
     return function(path) {
