@@ -46,12 +46,12 @@ class Hammer {
       config.set = _config;
 
       new utilities(self);
-      yield Promise.all([
+      yield [
         database.open(),
         http.open(),
         authentication.init(),
         plugins.init()
-      ]);
+      ];
 
       log('hammer.running', {"port": config.get.port});
       return self;
