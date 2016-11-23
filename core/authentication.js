@@ -2,7 +2,7 @@
 
 //TODO: add passport to Authentication to support for example facebook, google, github, and twitter login
 
-const uuid      = require('node-uuid');
+const uuid      = require('uuid');
 const bcrypt    = require('bcryptjs');
 const config    = require('./config');
 const database  = require('./database');
