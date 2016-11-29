@@ -4,8 +4,8 @@ const render    = require('@hammer/render');
 const themes    = require('@hammer/themes');
 const intercom  = require('@hammer/intercom');
 
-const _ = require('lodash');
-const helpers = require('@hammer/helpers');
+const _         = require('lodash');
+const helpers   = require('@hammer/helpers');
 
 module.exports = class Helpers {
   get helpers() {
