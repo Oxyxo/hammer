@@ -94,8 +94,15 @@ class Render {
 
   helperHandle(fn) {
     return (...args)=> {
-      //TODO: shall we throw a error when given function is not a generator function
-      return co(fn.apply(this, args)());
+      /* jshint -W124 */
+      let GeneratorFunction = (function*(){}).constructor;
+      let cb = fn.apply(this, args);
+
+      if(cb instanceof GeneratorFunction) {
+        return co(cb());
+      }
+
+      return cb;
     };
   }
 
