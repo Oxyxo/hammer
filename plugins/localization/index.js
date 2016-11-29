@@ -31,15 +31,20 @@ module.exports = class Loc {
     return [
       {
         "name": "loc",
-        "alias": ["lang", "localization"],
+        "alias": ["localization"],
         "fn": this.helper
+      },
+      {
+        "name": "language",
+        "alias": ["lang"],
+        "fn": this.language
       }
     ];
   }
 
   helper() {
     return function *() {
-
+      //Find data and return location
     };
   }
 
