@@ -43,12 +43,10 @@ class Seo {
 
   meta({data}) {
     let {root} = data;
-    return function() {
-      let meta = fs.readFileSync(path.join(config.get.seo.templates, 'meta.hbs'), 'utf-8');
+    let meta = fs.readFileSync(path.join(config.get.seo.templates, 'meta.hbs'), 'utf-8');
 
-      let template = render.serve(meta);
-      return render.safeString(template(data));
-    };
+    let template = render.serve(meta);
+    return render.safeString(template(data));
   }
 
   robots() {
