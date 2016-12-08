@@ -1,9 +1,11 @@
+/* jshint -W124 */
+
 'use strict';
 
-const fs = require('fs');
-const _ = require('lodash');
-const path = require('path');
-const send = require('koa-send');
+const fs    = require("fs");
+const _     = require("lodash");
+const path  = require("path");
+const mime  = require("mime-types");
 
 /**
  * This class handles all outgoing request
@@ -34,29 +36,29 @@ class Response {
     };
   }
 
-  /**
-   * Send is a alias to koa-send.
-   * This function apply's all arguments to
-   * koa-send.
-   * @method   Response@send
-   * @param    {Object} koa  The current koa session
-   * @param    {String} path Full path to the file that you are wanting to send
-   * @param    {Object} opts Optional options that can be set. See koa-send documentation.
-   * @return   {Function} Send returns a generator function that can be used by koa.
-   */
-  send(...args) {
-    return send.apply(this, args);
+
+  send(ctx, file) {
+    return function *() {
+      let ext     = path.extname(file);
+      let exists  = fs.existsSync(file);
+
+      if(!exists) {
+        ctx.status = 404; return;
+      }
+
+      let stats = fs.statSync(file);
+
+      if(!ctx.response.get("Last-Modified")) {
+        ctx.set("Last-Modified", stats.mtime.toUTCString());
+      }
+
+      ctx.type = mime.lookup(ext);
+      ctx.body = fs.createReadStream(file);
+    };
   }
 
-  //TODO: add 404 callback when url ends with file extention
-  /**
-   * Static sends static files back that are found
-   * in the given root folder.
-   * @method   Response@static
-   * @param    {String} url The base url
-   * @param    {String} root Root path to the base folder
-   */
   static(url, root) {
+    let self = this;
     url = new RegExp(`^${url}`);
 
     this.router.use(function *(next) {
@@ -64,30 +66,25 @@ class Response {
         return yield *next;
       }
 
-      root = root;
-      if(_.isFunction(root)) {
-        root = root();
-
-        if(_.isPromise(root)) {
-          root = yield root;
-        }
-      }
-
-      if(_.isArray(root)) {
-        root = path.join.apply(this, root);
-      }
+      root = _.isFunction(root) ? root() : root;
+      root = _.isPromise(root) ? yield root : root;
+      root = _.isArray(root) ? path.join.apply(this, root) : root;
 
       if(!root) {
         return yield *next;
       }
 
-      let file = this.url.replace(url, '');
-      if(_.pathExists(path.join(root, file), 'isFile')) {
-        return yield send(this, file, {root: root});
+      let file    = path.join(root, this.path.replace(url, ''));
+      let exists  = fs.existsSync(file);
+      let ext     = path.extname(file);
+
+      if(exists) {
+        yield self.send(this, file);
       }
 
-      if(path.extname(this.url)) {
+      if(!exists && ext) {
         this.status = 404;
+        return;
       }
 
       yield *next;
