@@ -1,17 +1,7 @@
-'use strict';
+let modules = {}
 
-class Modules {
-  constructor() {
-    this._modules = {};
-  }
-
-  extend(n, v) {
-    this._modules[n] = v;
-  }
-
-  get collect() {
-    return this._modules;
-  }
+exports.extend = function (name, value) {
+  modules[name] = value
 }
 
-module.exports = new Modules();
+exports.collect = modules
