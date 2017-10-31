@@ -1,3 +1,0 @@
-[submodule "plugins/client"]
-	path = plugins/client
-	url = https://github.com/projecthammer/client.git
