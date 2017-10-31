@@ -1,0 +1,2 @@
+we could spawn a new cluster / child process
+or run the code directly in the v8 engine ("vm")

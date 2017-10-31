@@ -1,7 +1,0 @@
-{
-  "name": "public",
-  "description": "Easily create a public folder in your project",
-  "main": "index.js",
-  "author": "Jeroen Rinzema",
-  "hammer": "0.1.x"
-}
